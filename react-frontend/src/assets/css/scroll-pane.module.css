@@ -1,0 +1,114 @@
+.container {
+  position: relative;
+  width: 95%;
+  height: 80px;
+  margin: 80px 150px 200px 50px;
+  display: block;
+}
+
+.logo {
+  max-width: 100%;
+  margin: auto;
+  padding-right: 20px;
+}
+.sub-nav {
+  grid-area: sb;
+  padding: 0 20px 0 40px;
+}
+.sub-nav a {
+  color: var(--light);
+  text-decoration: none;
+  color: #fff;
+  margin: 5px;
+}
+
+.container .box {
+  position: relative;
+  width: calc(280px - 30px);
+  height: calc(200px - 30px);
+  background: rgba(179, 6, 6, 0.452);
+  float: left;
+  box-sizing: border-box;
+  overflow: hidden;
+  border-radius: 8px;
+}
+.container .box:hover .content {
+  top: 130px;
+  opacity: 1;
+  cursor: pointer;
+}
+.container .box .icon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition: 0.5s;
+  z-index: 1;
+  background: #f00;
+}
+.container .box:hover .icon {
+  top: 20px;
+  left: calc(50% - 40px);
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.container .box .icon .fa {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 40px;
+  transition: 0.5s;
+  color: #fff;
+}
+.container .box:hover .icon .fa {
+  font-size: 20px;
+  cursor: pointer;
+}
+.container .box .content {
+  position: relative;
+  top: 50px;
+  height: cacl(100%-40px);
+  text-align: center;
+
+  box-sizing: border-box;
+  transition: 0.5s;
+}
+.container .box:hover .content {
+  position: relative;
+  top: 100px;
+  height: cacl(100%-40px);
+  text-align: center;
+  box-sizing: border-box;
+  transition: 0.5s;
+  cursor: pointer;
+}
+.container .box .content h3 {
+  margin: 0;
+  padding: 0;
+  color: #fff;
+  font-size: 20px;
+}
+.container .box .content p {
+  margin: 0;
+  padding: 0;
+  color: #fff;
+}
+.block {
+  height: 100%;
+  margin-top: 200px;
+}
+/* 
+:local(.container:hover .item) {
+  transform: translateX(-25%);
+}
+:local(.item:hover ~ .item) {
+  transform: translateX(25%);
+}
+:local(.item:hover) {
+  transform: scale(1.5) !important;
+} */
