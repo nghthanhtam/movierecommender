@@ -82,6 +82,7 @@ class MovieList extends Component {
     let { settings, listMovie, isOpenDetails, details } = this.state;
     let { paneTitle } = this.props;
     let img_url = "https://image.tmdb.org/t/p/w300";
+    let test;
 
     return (
       <>
