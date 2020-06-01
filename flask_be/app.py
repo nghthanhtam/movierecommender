@@ -9,16 +9,21 @@ from flask_cors import CORS
 import json
 import os 
 import jwt
-from os import environ
 
-SECRET_KEY = "thisissecretkey"
+from dotenv import load_dotenv
+load_dotenv()
+
+SECRET_KEY = os.getenv("SECRET_KEY")
+MONGO_URI = os.getenv('MONGO_URI')
 
 app = Flask(__name__, template_folder='templates',
             static_folder='static')
 CORS(app)
 
+app.config["MONGO_URI"] = MONGO_URI
+
+
 api = Api(app)
-app.config.from_envvar('APP_SETTINGS')
 
 mongo = PyMongo(app)
 
