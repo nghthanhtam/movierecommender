@@ -23,6 +23,7 @@ import GridItem from "components/Grid/GridItem.js";
 import Parallax from "components/Parallax/Parallax.js";
 import HeaderLinks from "components/Header/HeaderLinks.js";
 import MovieList from "./MovieList.js";
+import axios from "axios";
 
 const useStyles = makeStyles(styles1);
 const useStylesHeaderLink = makeStyles(stylesHeaderLink);
@@ -33,27 +34,44 @@ function Home(props) {
   const { ...rest } = props;
   const [listPaneTitle, setListPaneTitle] = useState([]);
   const [list, setList] = useState([]);
-  const [query, setQuery] = useState([""]);
+  const [query, setQuery] = useState("abc");
 
   useEffect(() => {
     async function fetchData() {
-      const response = await fetch("http://localhost:5000/rec");
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_HOST}/rec`);
       const data = await response.json();
       let arrTemp = [],
-        arrTemp1 = [];
+        arrPanelTitleTemp = [];
       data.movie.map((el) => {
-        arrTemp1.push(el[0].title);
+        arrPanelTitleTemp.push(el[0].title);
         el.shift(); //bỏ phim đàu tiên đi, vì đó là phim dựa vào để recommend
         arrTemp.push(el);
       });
       setList(arrTemp);
-      setListPaneTitle(arrTemp1);
+      setListPaneTitle(arrPanelTitleTemp);
     }
     fetchData();
   }, []);
 
   const handleChange = (e) => {
     setQuery(e.target.value);
+    if (e.target.value.length >= 4) getSearchedMovies();
+  };
+
+  const getSearchedMovies = () => {
+    let api = "/search/" + query;
+    fetch(`${process.env.REACT_APP_BACKEND_HOST}` + api)
+      .then((res) => res.json())
+      .then((data) => {
+        let arrTemp = [];
+        data.result.map((el) => {
+          arrTemp.push(el);
+        });
+        setListPaneTitle([]);
+        setList([]);
+        setList(arrTemp);
+        console.log(data.result);
+      });
   };
 
   return (

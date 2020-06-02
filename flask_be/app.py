@@ -51,10 +51,12 @@ def index():
         dataframe = pd.read_csv("movies_metadata.csv")
         ratings = pd.read_csv("ratings.csv")
         ratings = ratings[ratings.userId == 6417]
-        ratings = ratings.sort_values(by=['rating'])
+        #ratings = ratings.sort_values(by=['timestamp'])
+        ratings = ratings.sort_values(by='timestamp', ascending=False)
         ratings = ratings.drop_duplicates(subset=['movieId'], keep='first')
-        ratings = ratings[ratings.rating >= 2.5]
-        ratings = ratings.nlargest(3, ['timestamp'])
+        pivot = ratings["rating"].mean()
+        ratings = ratings[ratings.rating >= pivot]
+        ratings = ratings.nlargest(3, ['rating'])
 
         def get_kw(row):
             row = ast.literal_eval(row)
@@ -132,9 +134,51 @@ def index():
 # def about():
 #   return render_template('about.html')
 
-# @app.route('/multi/<int:num>', methods=['GET'])
-# def get_multiply10(num):
-#     return jsonify({'result': num*10})
+@app.route('/search/<string:query>', methods=['GET'])
+def get_search(query):
+    dataframe = pd.read_csv("movies_metadata.csv")
+
+    def get_kw(row):
+        row = ast.literal_eval(row)
+        res = ''
+        for i in row:
+            res += i['name']+' '
+        return res
+
+    # Select Features
+    features = ['genres', 'title']  # keyword, cast overview
+
+    # Create a column in dataframe which combines all selected features
+    for feature in features:
+        dataframe[feature] = dataframe[feature].fillna('')
+
+    def combined_features(row):
+        try:
+            return get_kw(row['genres']) + row['title']
+        except:
+            print("Error: ", row)
+
+    dataframe['combined_features'] = dataframe.apply(
+        combined_features, axis=1)
+
+    dataframe = dataframe[dataframe['combined_features'].str.contains(
+        'Fami', regex=False)]
+    dataframe = dataframe.nlargest(20, ['vote_average'])
+
+    res = []
+    temp = []
+    count = 0
+    index = 0
+    for movieId in dataframe["id"]:
+        index = index + 1
+        temp.append({'id': movieId})
+        count = count + 1
+        if count == 5 or index == 20:
+            res.append(temp)
+            temp = []
+            count = 0
+    return {'result': res}
+
 
 @app.route('/search/')
 def search():
@@ -306,8 +350,6 @@ class RoleList(Resource):
 
 api.add_resource(RoleList, '/roles')
 api.add_resource(Role, '/roles/<ObjectId:role_id>')
-
-
 api.add_resource(UserList, '/users')
 api.add_resource(User, '/users/<ObjectId:user_id>')
 api.add_resource(UserPassword, '/users/password/<ObjectId:user_id>')
