@@ -1,7 +1,12 @@
 import React, { Component } from "react";
 import "./App.css";
 import { createBrowserHistory } from "history";
-import { Router, Route, Switch } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect,
+} from "react-router-dom";
 import "assets/scss/material-kit-react.scss?v=1.8.0";
 
 // pages for this product
@@ -10,21 +15,65 @@ import Home from "views/Components/Home.js";
 import LandingPage from "./views/LandingPage/LandingPage.js";
 import ProfilePage from "views/ProfilePage/ProfilePage.js";
 import LoginPage from "views/LoginPage/LoginPage.js";
+import Layout from "./Layout";
+import PrivateRoute from "./PrivateRoute";
 
+// export default function App(props){
+//   const [isLogedIn, setLogedIn] = React.useState( true ? 'haha': 'hoho')
+//   const classes = useStyles();
+//   const { ...rest } = props;
+
+// }
 class App extends Component {
-  state = {};
+  state = {
+    token: localStorage.getItem("token"),
+  };
+
+  userLogin = () => {
+    this.setState({ token: true });
+  };
+
+  userLogout = () => {
+    localStorage.clear();
+    this.setState({ token: null });
+  };
 
   render() {
-    // let history = useHistory();
+    const { token } = this.state;
+    const { userLogin, userLogout } = this;
+
     return (
       <Router history={createBrowserHistory()}>
-        <Switch>
-          <Route path="/landing-page" component={LandingPage} />
-          <Route path="/profile-page" component={ProfilePage} />
-          <Route path="/login" component={LoginPage} />
-          <Route path="/home" component={Home} />
-          <Route path="/" component={Components} />
-        </Switch>
+        <Layout userLogin={userLogin} userLogout={userLogout} token={token}>
+          <Switch>
+            <Route
+              path="/landing-page"
+              component={LandingPage}
+              userLogout={this.userLogout}
+            />
+            <Route
+              path="/profile-page"
+              component={ProfilePage}
+              userLogout={this.userLogout}
+            />
+            <Route
+              path="/login"
+              render={(props) => {
+                if (token) return <Redirect to="/home" />;
+                else return <LoginPage {...props} userLogin={userLogin} />;
+              }}
+            />
+            <Route
+              path="/home"
+              render={(props) => {
+                if (token)
+                  return <Home {...props} token={token} component={Home} />;
+                else return <Redirect to="/login" />;
+              }}
+            />
+            <Route path="/" exact component={Components} />
+          </Switch>
+        </Layout>
       </Router>
     );
   }

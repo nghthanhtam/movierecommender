@@ -1,9 +1,11 @@
 /*eslint-disable*/
 import React from "react";
+import CustomInput from "components/CustomInput/CustomInput.js";
+
 import DeleteIcon from "@material-ui/icons/Delete";
 import IconButton from "@material-ui/core/IconButton";
 // react components for routing our app without refresh
-import { Link } from "react-router-dom";
+import { Link, BrowserRouter as Router } from "react-router-dom";
 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -24,6 +26,11 @@ const useStyles = makeStyles(styles);
 
 export default function HeaderLinks(props) {
   const classes = useStyles();
+  const { userLogout } = props;
+  const userLogoutInComp = (e) => {
+    e.preventDefault();
+    userLogout();
+  };
   return (
     <List className={classes.list}>
       <ListItem className={classes.listItem}>
@@ -35,6 +42,16 @@ export default function HeaderLinks(props) {
         >
           <CloudDownload className={classes.icons} /> Download
         </Button>
+        {/* <CustomInput
+          id="regular"
+          inputProps={{
+            placeholder: "Type, genre",
+          }}
+          formControlProps={{
+            fullWidth: true,
+          }}
+          white
+        /> */}
       </ListItem>
 
       <ListItem className={classes.listItem}>
@@ -47,13 +64,14 @@ export default function HeaderLinks(props) {
           }}
           buttonIcon={Person}
           dropdownList={[
-            <Link to="/" className={classes.dropdownLink}>
+            <Link to="/login" className={classes.dropdownLink}>
               Settings
             </Link>,
             <a
-              href="https://creativetimofficial.github.io/material-kit-react/#/documentation?ref=mkr-navbar"
+              href="#"
               target="_blank"
               className={classes.dropdownLink}
+              onClick={userLogoutInComp}
             >
               Sign out
             </a>,

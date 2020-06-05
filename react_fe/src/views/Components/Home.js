@@ -1,28 +1,17 @@
-import React, { Component } from "react";
-import Slider from "react-slick";
+import React, { Component, Fragment } from "react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import classNames from "classnames";
-import { Row, Col } from "react-bootstrap";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-import styles from "../../assets/css/scroll-pane.module.css";
 // core components
-import Header from "components/Header/Header.js";
-import Footer from "components/Footer/Footer.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
 import SectionBasics from "./Sections/SectionBasics.js";
-import Button from "components/CustomButtons/Button.js";
 import Parallax from "components/Parallax/Parallax.js";
-import HeaderLinks from "components/Header/HeaderLinks.js";
 import styles1 from "assets/jss/material-kit-react/views/components.js";
 import MovieList from "./MovieList.js";
-const cl = makeStyles(styles1)
 class Home extends Component {
-  constructor() {
-    super();
-  }
   state = {
     movie: "",
     movieList: [
@@ -52,22 +41,10 @@ class Home extends Component {
   }
 
   render() {
-    let { classes, movie, movieList, settings } = this.state;
-    let { ...rest } = this.props;
-    console.log(cl)
+    let { classes, movie, movieList } = this.state;
+
     return (
-      <div>
-        <Header
-          brand="Material Kit React"
-          rightLinks={<HeaderLinks />}
-          fixed
-          color="transparent"
-          changeColorOnScroll={{
-            height: 400,
-            color: "white",
-          }}
-          {...rest}
-        />
+      <Fragment>
         <Parallax image={require("assets/img/bg4.jpg")}>
           <div className={classes.container}>
             <GridContainer>
@@ -101,8 +78,7 @@ class Home extends Component {
           </div>
         </div>
         <SectionBasics />
-        <Footer />
-      </div>
+      </Fragment>
     );
   }
 }
