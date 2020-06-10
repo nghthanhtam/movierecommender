@@ -9,9 +9,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import styles from "../../assets/css/scroll-pane.module.css";
 import effects from "../../assets/css/appearing-effect.css";
 import styles1 from "assets/jss/material-kit-react/views/components.js";
-import NextArrow from "./NextArrow";
 import MovieDetails from "./MovieDetails";
-import PrevArrow from "./PrevArrow";
 //import { FaAngleDown } from "react-icons/fa";
 
 class MovieList extends Component {
