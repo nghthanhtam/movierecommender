@@ -14,7 +14,7 @@ import styles from "../../assets/css/scroll-pane.module.css";
 import stylesHeaderLink from "assets/jss/material-kit-react/components/headerLinksStyle.js";
 
 import CustomInput from "components/CustomInput/CustomInput.js";
-import Button from "components/CustomButtons/Button.js";
+//import Button from "components/CustomButtons/Button.js";
 import Header from "components/Header/Header.js";
 import Footer from "components/Footer/Footer.js";
 import CustomDropdown from "components/CustomDropdown/CustomDropdown.js";
@@ -23,7 +23,7 @@ import GridItem from "components/Grid/GridItem.js";
 import Parallax from "components/Parallax/Parallax.js";
 import HeaderLinks from "components/Header/HeaderLinks.js";
 import MovieList from "./MovieList.js";
-import axios from "axios";
+import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles(styles1);
 const useStylesHeaderLink = makeStyles(stylesHeaderLink);
@@ -32,30 +32,50 @@ function Home(props) {
   const classes = useStyles();
   const classesHeaderLink = useStylesHeaderLink();
   const { ...rest } = props;
-  const [listPaneTitle, setListPaneTitle] = useState([]);
+  //const [listPaneTitle, setListPaneTitle] = useState([]);
   const [list, setList] = useState([]);
-  const [query, setQuery] = useState("abc");
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
     async function fetchData() {
       const response = await fetch(`${process.env.REACT_APP_BACKEND_HOST}/rec`);
       const data = await response.json();
-      let arrTemp = [],
-        arrPanelTitleTemp = [];
+      let arrTemp = [];
       data.movie.map((el) => {
-        arrPanelTitleTemp.push(el[0].title);
-        el.shift(); //bỏ phim đàu tiên đi, vì đó là phim dựa vào để recommend
+        //arrPanelTitleTemp.push(el[0].title);
+        //el.shift(); //bỏ phim đàu tiên đi, vì đó là phim dựa vào để recommend
         arrTemp.push(el);
       });
       setList(arrTemp);
-      setListPaneTitle(arrPanelTitleTemp);
+      //setListPaneTitle(arrPanelTitleTemp);
+      console.log(data.movie);
     }
     fetchData();
   }, []);
 
   const handleChange = (e) => {
     setQuery(e.target.value);
-    if (e.target.value.length >= 4) getSearchedMovies();
+    if (e.target.value.length >= 3) getSearchedMovies();
+    else if (e.target.value === "") {
+      getRecommendedMovies();
+    }
+  };
+
+  const getRecommendedMovies = () => {
+    fetch(`${process.env.REACT_APP_BACKEND_HOST}/rec`)
+      .then((res) => res.json())
+      .then((data) => {
+        let arrTemp = [],
+          arrPanelTitleTemp = [];
+        data.movie.map((el) => {
+          //arrPanelTitleTemp.push(el[0].title);
+          //el.shift(); //bỏ phim đàu tiên đi, vì đó là phim dựa vào để recommend
+          arrTemp.push(el);
+        });
+        setList([]);
+        setList(arrTemp);
+        //setListPaneTitle(arrPanelTitleTemp);
+      });
   };
 
   const getSearchedMovies = () => {
@@ -67,7 +87,7 @@ function Home(props) {
         data.result.map((el) => {
           arrTemp.push(el);
         });
-        setListPaneTitle([]);
+        //setListPaneTitle([]);
         setList([]);
         setList(arrTemp);
         console.log(data.result);
@@ -101,11 +121,11 @@ function Home(props) {
                     },
                   }}
                 />
-                <div style={{ padding: "20px 0px 0px 0px" }}>
+                {/* <div style={{ padding: "20px 0px 0px 0px" }}>
                   <Button justIcon round color="white">
                     <Search className={classesHeaderLink.searchIcon} />
                   </Button>
-                </div>
+                </div> */}
               </div>
             </ListItem>
 
@@ -158,7 +178,8 @@ function Home(props) {
             <MovieList
               key={index}
               list={similar_movies}
-              paneTitle={listPaneTitle[index]}
+              //paneTitle={listPaneTitle[index]}
+              query={query == "" ? false : true}
             />
             //)
           );

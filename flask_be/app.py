@@ -13,6 +13,8 @@ from bson.objectid import ObjectId
 from pymongo.collection import ReturnDocument
 from bson import json_util, ObjectId
 from flask_cors import CORS
+from datetime import datetime
+import csv
 import json
 import os
 import jwt
@@ -32,6 +34,20 @@ app.config["MONGO_URI"] = MONGO_URI
 mongo = PyMongo(app)
 
 
+@app.route('/writecsv', methods=['POST'])
+def writecsv():
+    data = request.get_json()
+    with open('ratings.csv', 'a', newline='') as f:
+        thewriter = csv.writer(f)
+        ratings = pd.read_csv("ratings.csv")
+        ratings = ratings[ratings.movieId == data["id"]][ratings.userId == 592]
+        if not ratings.empty and ratings["rating"].values[0] == data["rating"]:
+            return response('Dupplicate ratings', 200)
+        thewriter.writerow(['592', data["id"], data["rating"],
+                            datetime.timestamp(datetime.now())])
+    return response('Added rating successfully', data["id"])
+
+
 @app.route('/rec')
 def index():
     def recommend():
@@ -39,24 +55,32 @@ def index():
             return dataframe[dataframe.index == index]["title"].values[0]
 
         def get_index_from_movieid(id):
-            return dataframe[dataframe.id == id]["index"].values[0]
+            return dataframe[dataframe.movieId == id]["index"].values[0]
 
         def get_id_from_index(index):
-            return dataframe[dataframe.index == index]["id"].values[0]
+            return dataframe[dataframe.index == index]["movieId"].values[0]
 
         def get_posterpath_from_index(index):
             return dataframe[dataframe.index == index]["poster_path"].values[0]
 
+        def get_rating_from_movieid(movieId, userId, all_ratings):
+            rating = all_ratings[all_ratings.movieId ==
+                                 movieId][all_ratings.userId == userId]["rating"].values
+            if len(rating) != 0:
+                return rating[0]
+            else:
+                return 0
+
         # Step 1: Read CSV File
         dataframe = pd.read_csv("movies_metadata.csv")
-        ratings = pd.read_csv("ratings.csv")
-        ratings = ratings[ratings.userId == 6417]
-        #ratings = ratings.sort_values(by=['timestamp'])
+        all_ratings = pd.read_csv("ratings.csv")
+        ratings = all_ratings[all_ratings.userId == 592]
         ratings = ratings.sort_values(by='timestamp', ascending=False)
         ratings = ratings.drop_duplicates(subset=['movieId'], keep='first')
         pivot = ratings["rating"].mean()
         ratings = ratings[ratings.rating >= pivot]
-        ratings = ratings.nlargest(3, ['rating'])
+        ratings = ratings.nlargest(20, ['rating'])
+        ratings = ratings.nlargest(3, ['timestamp'])
 
         def get_kw(row):
             row = ast.literal_eval(row)
@@ -106,7 +130,7 @@ def index():
                 similar_movies, key=lambda x: x[1], reverse=True)
             list_sorted_similar_movies.append(sorted_similar_movies)
 
-        # Step 8: Print titles of first 50 movies
+        # Step 8: Print titles of first 12 movies
         res = []
         for list_movie in list_sorted_similar_movies:
             list_temp = []
@@ -114,25 +138,29 @@ def index():
             for movie in list_movie:
                 movieid = int(get_id_from_index(movie[0]))
                 title = get_title_from_index(movie[0])
-                list_temp.append({'id': movieid, 'title': title})
+                rating = get_rating_from_movieid(movieid, 592, all_ratings)
+                list_temp.append(
+                    {'id': movieid, 'title': title, 'rating': rating})
                 # list_temp.append(movieid)
                 count = count + 1
-                if count > 6:
+                if count > 12:
                     break
-            res.append(list_temp)
+            res.append({'type': 'recommend', 'movie_data': list_temp})
+
+        # get popular movies
+        dataframe = dataframe.nlargest(12, ['popularity'])
+        list_popular_movie = np.asarray(dataframe['movieId'])
+        list_popular_movie_temp = []
+        for movieid in list_popular_movie:
+            rating = get_rating_from_movieid(movieid, 592, all_ratings)
+            list_popular_movie_temp.append(
+                {'id': int(movieid), 'title': '', 'rating': rating})
+        res.append({'type': 'popular', 'movie_data': list_popular_movie_temp})
+
         return res
 
     return {'movie': recommend()}
 
-
-# @app.route('/favicon.ico')
-# def favicon():
-#     return send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
-
-
-# @app.route('/about')
-# def about():
-#   return render_template('about.html')
 
 @app.route('/search/<string:query>', methods=['GET'])
 def get_search(query):
@@ -162,28 +190,22 @@ def get_search(query):
         combined_features, axis=1)
 
     dataframe = dataframe[dataframe['combined_features'].str.contains(
-        'Fami', regex=False)]
+        query, regex=False)]
     dataframe = dataframe.nlargest(20, ['vote_average'])
 
     res = []
     temp = []
     count = 0
     index = 0
-    for movieId in dataframe["id"]:
+    for movieId in dataframe["movieId"]:
         index = index + 1
         temp.append({'id': movieId})
         count = count + 1
-        if count == 5 or index == 20:
-            res.append(temp)
+        if count == 7 or index == 21:
+            res.append({'type': 'search', 'movie_data': temp})
             temp = []
             count = 0
     return {'result': res}
-
-
-@app.route('/search/')
-def search():
-    name = request.args.get('name')
-    return name
 
 
 def response(msg, status):
