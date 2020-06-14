@@ -5,7 +5,6 @@
   margin: 200px 150px 190px 50px;
   display: block;
   color: white;
-  font-weight: 300;
 }
 
 .logo {
@@ -32,7 +31,7 @@
   float: left;
   box-sizing: border-box;
   overflow: hidden;
-  border-radius: 15px;
+  border-radius: 25px;
 }
 .container .box:hover {
   position: relative;

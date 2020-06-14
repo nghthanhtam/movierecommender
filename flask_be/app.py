@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, render_template, request
 import pandas as pd
 import numpy as np
+from scipy import sparse
 import sys
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -74,6 +75,9 @@ def index():
         # Step 1: Read CSV File
         dataframe = pd.read_csv("movies_metadata.csv")
         all_ratings = pd.read_csv("ratings.csv")
+        all_dataframe = dataframe
+
+        # filter user and his favorite movies
         ratings = all_ratings[all_ratings.userId == 592]
         ratings = ratings.sort_values(by='timestamp', ascending=False)
         ratings = ratings.drop_duplicates(subset=['movieId'], keep='first')
@@ -82,6 +86,7 @@ def index():
         ratings = ratings.nlargest(20, ['rating'])
         ratings = ratings.nlargest(3, ['timestamp'])
 
+        # Content-based recommend
         def get_kw(row):
             row = ast.literal_eval(row)
             res = ''
@@ -141,7 +146,6 @@ def index():
                 rating = get_rating_from_movieid(movieid, 592, all_ratings)
                 list_temp.append(
                     {'id': movieid, 'title': title, 'rating': rating})
-                # list_temp.append(movieid)
                 count = count + 1
                 if count > 12:
                     break
@@ -157,6 +161,51 @@ def index():
                 {'id': int(movieid), 'title': '', 'rating': rating})
         res.append({'type': 'popular', 'movie_data': list_popular_movie_temp})
 
+        # Collaborative recommend
+        ratings = pd.merge(all_dataframe, all_ratings).drop(
+            ['genres', 'timestamp'], axis=1)
+
+        def standardize(row):
+            new_row = np.subtract(row, row.mean(), dtype=np.float32)
+            return new_row
+
+        userRatings = ratings.pivot_table(index=['userId'], columns=[
+                                          'movieId'], values='rating')
+        userRatings = userRatings.dropna(thresh=10, axis=1)
+        userRatings_std = userRatings.apply(standardize)
+        userRatings_std = userRatings_std.fillna(0, axis=1)
+
+        item_similarity = cosine_similarity(userRatings_std.T)
+        item_similarity_df = pd.DataFrame(
+            item_similarity, index=userRatings.columns, columns=userRatings.columns)
+
+        def get_colla_similar_movies(movie_name, rating):
+            similar_ratings = item_similarity_df[movie_name]*(rating-2.5)
+            similar_ratings = similar_ratings.sort_values(ascending=False)
+            return similar_ratings
+
+        # 165-Back to the Future Part II
+            # 364-Batman Returns
+            # 260-The 39 Steps
+        romantic_lover = [(165, 4), (364, 3), (260, 1)]
+        colla_similar_movies = pd.DataFrame()
+        for movie, rating in romantic_lover:
+            colla_similar_movies = colla_similar_movies.append(
+                get_colla_similar_movies(movie, rating))
+
+        colla_similar_movies = colla_similar_movies.sum().sort_values(ascending=False)
+        colla_similar_movies_id = []
+        count = 0
+        for movie in colla_similar_movies:
+            count = count + 1
+            # get column name with specific value (ratings)
+            movieId = (colla_similar_movies == movie).idxmax(axis=1)
+            rating = get_rating_from_movieid(movieid, 592, all_ratings)
+            colla_similar_movies_id.append(
+                {'id': int(movieId), 'rating': rating})
+            if count > 11:
+                break
+        res.append({'type': 'colla', 'movie_data': colla_similar_movies_id})
         return res
 
     return {'movie': recommend()}

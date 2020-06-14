@@ -61,10 +61,12 @@ class MovieList extends Component {
     this._isMounted = true;
 
     if (list.type === "recommend") {
-      panelTitle = "Because you liked " + list.movie_data[0].title;
+      panelTitle = "Because You Liked " + list.movie_data[0].title;
       list.movie_data.shift();
+    } else if (list.type === "popular") {
+      panelTitle = "Popular Movies For You";
     } else {
-      panelTitle = "Popular movies for you";
+      panelTitle = "You May Also Like";
     }
     this.setState({ panelTitle: panelTitle });
 
@@ -112,7 +114,15 @@ class MovieList extends Component {
     return (
       <>
         <div className={styles.container}>
-          {!query && listMovie.length > 0 && <h3> {panelTitle}</h3>}
+          <div
+            style={{
+              marginBottom: "15px",
+              fontWeight: "bold",
+              fontSize: "25px",
+            }}
+          >
+            {!query && listMovie.length > 0 && <div> {panelTitle}</div>}
+          </div>
           <Slider {...settings}>
             {listMovie.map((movie) => {
               return (
