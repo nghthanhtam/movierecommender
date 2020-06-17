@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import "./App.css";
 import { createBrowserHistory } from "history";
 import {
   BrowserRouter as Router,
@@ -16,7 +15,8 @@ import LandingPage from "./views/LandingPage/LandingPage.js";
 import ProfilePage from "views/ProfilePage/ProfilePage.js";
 import LoginPage from "views/LoginPage/LoginPage.js";
 import Layout from "./Layout";
-import PrivateRoute from "./PrivateRoute";
+import SignUp from "./views/SignUpPage/SignUp";
+// import PrivateRoute from "./PrivateRoute";
 
 // export default function App(props){
 //   const [isLogedIn, setLogedIn] = React.useState( true ? 'haha': 'hoho')
@@ -56,6 +56,8 @@ class App extends Component {
               component={ProfilePage}
               userLogout={this.userLogout}
             />
+
+            <Route path="/signup" component={SignUp} />
             <Route
               path="/login"
               render={(props) => {

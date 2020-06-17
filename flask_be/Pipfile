@@ -7,11 +7,12 @@ verify_ssl = true
 
 [packages]
 python-dotenv = "*"
-jwt = "*"
 flask-restful = "*"
 flask-pymongo = "*"
 werkzeug = "*"
 flask-cors = "*"
+pyjwt = "*"
+pandas = "*"
 
 [requires]
 python_version = "3.8"

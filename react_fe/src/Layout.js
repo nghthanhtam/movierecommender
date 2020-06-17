@@ -2,12 +2,11 @@ import Header from "components/Header/Header.js";
 import HeaderLinks from "components/Header/HeaderLinks.js";
 
 import Footer from "components/Footer/Footer.js";
-import React, { Fragment } from "react";
+import React from "react";
 
 import image from "assets/img/bg7.jpg";
 import styles from "assets/jss/material-kit-react/views/loginPage.js";
 import { makeStyles } from "@material-ui/core/styles";
-import { Button } from "@material-ui/core";
 import { useLocation } from "react-router-dom";
 const useStyles = makeStyles(styles);
 
@@ -16,15 +15,13 @@ export default function Layout(props) {
   const classes = useStyles();
   const location = useLocation();
   const { pathname } = location;
+  const path = pathname === "/login" || pathname === "/signup" ? true : false;
   return (
     <div>
-      {pathname === "/login" ? (
+      {path ? (
         <Header
           brand="Material Kit React"
           userLogout={userLogout}
-          rightLinks={(props) => (
-            <HeaderLinks {...props} userLogout={userLogout} />
-          )}
           fixed
           color="transparent"
           changeColorOnScroll={{
@@ -38,18 +35,30 @@ export default function Layout(props) {
       ) : (
         <Header
           brand="Material Kit React"
-          rightLinks={<HeaderLinks userLogout={userLogout} />}
-          absolute
+          rightLinks={
+            <HeaderLinks
+              changeColorOnScroll={{
+                height: 400,
+                color: "white",
+              }}
+              userLogout={userLogout}
+            />
+          }
+          fixed
           color="transparent"
+          changeColorOnScroll={{
+            height: 400,
+            color: "white",
+          }}
           token={token}
           userLogin={userLogin}
           {...rest}
         />
       )}
       <div
-        className={pathname === "/login" ? classes.pageHeader : null}
+        className={path ? classes.pageHeader : null}
         style={
-          pathname === "/login"
+          path
             ? {
                 backgroundImage: "url(" + image + ")",
                 backgroundSize: "cover",
@@ -59,7 +68,7 @@ export default function Layout(props) {
         }
       >
         {children}
-        <Footer white={pathname === "/login" ? true : false} />
+        <Footer white={path ? true : false} />
       </div>
     </div>
   );
