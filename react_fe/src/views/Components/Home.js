@@ -41,6 +41,7 @@ class Home extends Component {
   }
 
   render() {
+
     let { classes, movie, movieList } = this.state;
 
     return (

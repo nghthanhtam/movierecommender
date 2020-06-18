@@ -18,9 +18,9 @@ import Tooltip from "@material-ui/core/Tooltip";
 // @material-ui/icons
 import { Apps, CloudDownload, Person } from "@material-ui/icons";
 
+
 import stylesHeaderLink from "assets/jss/material-kit-react/components/headerLinksStyle.js";
 const useStylesHeaderLink = makeStyles(stylesHeaderLink);
-
 // core components
 import CustomDropdown from "components/CustomDropdown/CustomDropdown.js";
 import Button from "components/CustomButtons/Button.js";
@@ -68,6 +68,7 @@ export default function HeaderLinks(props) {
           />
         </div>
         {/* <Button
+
           href="https://www.creative-tim.com/product/material-kit-react?ref=mkr-navbar"
           color="transparent"
           target="_blank"
@@ -105,6 +106,7 @@ export default function HeaderLinks(props) {
               target="_blank"
               className={classes.dropdownLink}
               onClick={userLogoutInComp}
+
             >
               Sign out
             </a>,

@@ -2,14 +2,14 @@ import {
   primaryColor,
   dangerColor,
   successColor,
-  defaultFont,
+  defaultFont
 } from "assets/jss/material-kit-react.js";
 
 const customInputStyle = {
   disabled: {
     "&:before": {
-      borderColor: "transparent !important",
-    },
+      borderColor: "transparent !important"
+    }
   },
   underline: {
     "&:hover:not($disabled):before,&:before": {
@@ -69,8 +69,9 @@ const customInputStyle = {
     paddingTop: "27px",
     position: "relative",
     "& svg,& .fab,& .far,& .fal,& .fas,& .material-icons": {
-      color: "#495057",
-    },
+      color: "#495057"
+    }
+
   },
   input: {
     color: "#495057",
@@ -80,11 +81,12 @@ const customInputStyle = {
       fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
       fontWeight: "400",
       lineHeight: "1.42857",
-      opacity: "1",
+      opacity: "1"
     },
     "&::placeholder": {
-      color: "#AAAAAA",
-    },
+      color: "#AAAAAA"
+    }
+
   },
   whiteInput: {
     "&,&::placeholder": {

@@ -13,7 +13,7 @@ import Components from "views/Components/Components.js";
 import Home from "views/Components/Home.js";
 import LandingPage from "./views/LandingPage/LandingPage.js";
 import ProfilePage from "views/ProfilePage/ProfilePage.js";
-import LoginPage from "views/LoginPage/LoginPage.js";
+import LoginPage from "views/LoginPage/LoginPage.js"
 import Layout from "./Layout";
 import SignUp from "./views/SignUpPage/SignUp";
 // import PrivateRoute from "./PrivateRoute";
