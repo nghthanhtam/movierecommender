@@ -1,3 +1,5 @@
 {
-    "python.pythonPath": "env\\Scripts\\python.exe"
+  "python.pythonPath": "C:\\Users\\trung\\Desktop\\FYP\\movierecommender\\flask_be\\venv\\Scripts\\python.exe",
+  "git.ignoreLimitWarning": true,
+  "python.linting.pylintPath": "C:\\Users\\trung\\Desktop\\FYP\\movierecommender\\flask_be\\venv\\Scripts\\pylint.exe"
 }

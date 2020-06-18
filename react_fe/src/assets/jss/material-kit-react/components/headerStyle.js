@@ -46,10 +46,10 @@ const headerStyle = {
     alignItems: "center",
     justifyContent: "space-between",
     display: "flex",
-    flexWrap: "nowrap"
+    flexWrap: "nowrap",
   },
   flex: {
-    flex: 1
+    flex: 1,
   },
   title: {
     ...defaultFont,
@@ -62,11 +62,11 @@ const headerStyle = {
     letterSpacing: "unset",
     "&:hover,&:focus": {
       color: "inherit",
-      background: "transparent"
-    }
+      background: "transparent",
+    },
   },
   appResponsive: {
-    margin: "20px 10px"
+    margin: "20px 10px",
   },
   primary: {
     backgroundColor: primaryColor,
@@ -101,8 +101,7 @@ const headerStyle = {
   rose: {
     backgroundColor: roseColor,
     color: "#FFFFFF",
-    boxShadow:
-      "0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 12px -5px rgba(233, 30, 99, 0.46)"
+    boxShadow:"0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 12px -5px rgba(233, 30, 99, 0.46)"
   },
   transparent: {
     backgroundColor: "transparent !important",
@@ -122,8 +121,7 @@ const headerStyle = {
     marginBottom: "20px",
     color: "#555",
     backgroundColor: "#fff !important",
-    boxShadow:
-      "0 4px 18px 0px rgba(0, 0, 0, 0.12), 0 7px 10px -5px rgba(0, 0, 0, 0.15)"
+    boxShadow:"0 4px 18px 0px rgba(0, 0, 0, 0.12), 0 7px 10px -5px rgba(0, 0, 0, 0.15)"
   },
   drawerPaper: {
     border: "none",

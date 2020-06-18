@@ -7,9 +7,6 @@ import styles from "../../assets/css/scroll-pane.module.css";
 import styles1 from "assets/jss/material-kit-react/views/components.js";
 
 class MovieList extends Component {
-  constructor() {
-    super();
-  }
   state = {
     settings: {
       infinite: true,
