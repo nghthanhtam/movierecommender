@@ -38,15 +38,24 @@ mongo = PyMongo(app)
 @app.route('/writecsv', methods=['POST'])
 def writecsv():
     data = request.get_json()
+    mean_rating = data['rating']
+    if mean_rating == -2:
+        ratings = pd.read_csv('ratings.csv')
+        ratings = ratings[ratings.userId == data['userid']]
+        mean_rating = ratings["rating"].mean() + 0.5
+        print(mean_rating)
     with open('ratings.csv', 'a', newline='') as f:
         thewriter = csv.writer(f)
         ratings = pd.read_csv("ratings.csv")
         ratings = ratings[ratings.movieId == data["id"]][ratings.userId == 592]
-        if not ratings.empty and ratings["rating"].values[0] == data["rating"]:
+        if not ratings.empty and data['rating'] == -2:
+            return response('Failed to add rating', 200)
+        if not ratings.empty and ratings["rating"].values[0] == mean_rating:
             return response('Dupplicate ratings', 200)
-        thewriter.writerow(['592', data["id"], data["rating"],
+        thewriter.writerow(['592', data["id"], mean_rating,
                             datetime.timestamp(datetime.now())])
-    return response('Added rating successfully', data["id"])
+        return response('Added rating successfully', 200)
+    return response('Failed to add rating', 500)
 
 
 @app.route('/rec')
@@ -170,7 +179,7 @@ def index():
             return new_row
 
         userRatings = ratings.pivot_table(index=['userId'], columns=[
-                                          'movieId'], values='rating')
+            'movieId'], values='rating')
         userRatings = userRatings.dropna(thresh=10, axis=1)
         userRatings_std = userRatings.apply(standardize)
         userRatings_std = userRatings_std.fillna(0, axis=1)
@@ -428,5 +437,5 @@ api.add_resource(UserPassword, '/users/password/<ObjectId:user_id>')
 api.add_resource(UserLogin, '/users/login')
 api.add_resource(Ping, '/')
 
-
-app.run(debug=True)
+if __name__ == "__main__":
+    app.run(debug=True)

@@ -17,7 +17,7 @@ class MovieList extends Component {
   constructor(props) {
     super(props);
     this.myRef = React.createRef();
-    this.onChange = this.onChange.bind(this);
+    this.onChaonOpenDetClicknge = this.onOpenDetClick.bind(this);
     this.state = {
       settings: {
         infinite: true,
@@ -35,11 +35,27 @@ class MovieList extends Component {
     };
   }
 
-  onChange = (event, movieId) => {
-    let value = this.state.isOpenDetails ? false : true,
-      movie = this.state.listMovie.find((movie) => movie.id == movieId);
+  onOpenDetClick = (event, movieId) => {
+    let { isOpenDetails, listMovie } = this.state;
+    let value = isOpenDetails ? false : true,
+      movie = listMovie.find((movie) => movie.id == movieId);
 
-    this.setState({ isOpenDetails: value });
+    this.setState({ isOpenDetails: value }, () => {
+      if (isOpenDetails === true) return;
+      fetch(`${process.env.REACT_APP_BACKEND_HOST}/writecsv`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ rating: -2, id: movieId, userid: 592 }),
+      })
+        .then((response) => {
+          return response.json();
+        })
+        .then((json) => {
+          console.log(json);
+        });
+    });
     if (value) this.myRef.current.scrollIntoView({ behavior: "smooth" });
 
     this.setState((prevState) => ({
@@ -82,7 +98,7 @@ class MovieList extends Component {
         .then((data) => {
           let movie = {
             id: item.id,
-            rating: item.rating,
+            rating: item.rating % 1 === 0 ? item.rating : 0,
             title: data.title,
             posterPath: data.poster_path,
             overview: data.overview,
@@ -145,7 +161,7 @@ class MovieList extends Component {
 
                   <IconButton
                     className={styles.arrowbtn}
-                    onClick={(e) => this.onChange(e, movie.id)}
+                    onClick={(e) => this.onOpenDetClick(e, movie.id)}
                   >
                     {isOpenDetails ? (
                       <SvgIcon>
