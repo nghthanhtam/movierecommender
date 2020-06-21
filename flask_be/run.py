@@ -2,12 +2,12 @@ from middleware import Middleware
 from bson import ObjectId
 from flask_restful import Resource, Api
 from app import app, mongo
-from api.Role import Role
-from api.RoleList import RoleList
-from api.User import User
-from api.UserChangePassword import UserChangePassword
-from api.UserList import UserList
-from api.UserLogin import UserLogin
+from api.Role.Role import Role
+from api.Role.RoleList import RoleList
+from api.User.User import User
+from api.User.UserChangePassword import UserChangePassword
+from api.User.UserList import UserList
+from api.User.UserLogin import UserLogin
 from api.Dataset.RecommendationSystem import Recommendation, WriteCSV, Search
 api = Api(app)
 
