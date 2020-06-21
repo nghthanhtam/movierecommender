@@ -10,6 +10,8 @@ pyjwt = "*"
 flask-restful = "*"
 python-dotenv = "*"
 flask = "*"
+pandas = "*"
+sklearn = "*"
 
 [requires]
 python_version = "3.7"
