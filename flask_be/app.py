@@ -1,11 +1,9 @@
-
 from flask_cors import CORS
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, jsonify, request
 from flask_pymongo import PyMongo
 import os
 from dotenv import load_dotenv
 load_dotenv()
-
 
 MONGO_URI = os.getenv('MONGO_URI')
 

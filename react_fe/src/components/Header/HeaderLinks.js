@@ -17,11 +17,12 @@ import Tooltip from "@material-ui/core/Tooltip";
 
 // @material-ui/icons
 import { Apps, CloudDownload, Person } from "@material-ui/icons";
-
+import Search from "@material-ui/icons/Search";
 
 import stylesHeaderLink from "assets/jss/material-kit-react/components/headerLinksStyle.js";
 const useStylesHeaderLink = makeStyles(stylesHeaderLink);
 // core components
+import CustomInput from "components/CustomInput/CustomInput.js";
 import CustomDropdown from "components/CustomDropdown/CustomDropdown.js";
 import Button from "components/CustomButtons/Button.js";
 
@@ -106,7 +107,6 @@ export default function HeaderLinks(props) {
               target="_blank"
               className={classes.dropdownLink}
               onClick={userLogoutInComp}
-
             >
               Sign out
             </a>,

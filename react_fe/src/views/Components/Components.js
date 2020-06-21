@@ -18,7 +18,6 @@ import HeaderLinks from "components/Header/HeaderLinks.js";
 import SectionBasics from "./Sections/SectionBasics.js";
 import SectionNavbars from "./Sections/SectionNavbars.js";
 import SectionTabs from "./Sections/SectionTabs.js";
-import SectionPills from "./Sections/SectionPills.js";
 import SectionNotifications from "./Sections/SectionNotifications.js";
 import SectionTypography from "./Sections/SectionTypography.js";
 import SectionJavascript from "./Sections/SectionJavascript.js";
@@ -35,17 +34,10 @@ class Components extends Component {
     classes: makeStyles(styles),
   };
 
-  componentDidMount() {
-    fetch("http://localhost:5000/rec")
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data.movie);
-        this.setState({ movie: data.movie });
-      });
-  }
+  componentDidMount() {}
 
   render() {
-    let { classes, movie } = this.state;
+    let { classes } = this.state;
     let { ...rest } = this.props;
     return (
       <div>
@@ -68,7 +60,7 @@ class Components extends Component {
                   <h1 className={classes.title}>
                     A movie that you should watch
                   </h1>
-                  <h3 className={classes.subtitle}>{movie}</h3>
+                  <h3 className={classes.subtitle}>movie</h3>
                 </div>
               </GridItem>
             </GridContainer>
@@ -79,7 +71,6 @@ class Components extends Component {
           <SectionBasics />
           <SectionNavbars />
           <SectionTabs />
-          <SectionPills />
           <SectionNotifications />
           <SectionTypography />
           <SectionJavascript />

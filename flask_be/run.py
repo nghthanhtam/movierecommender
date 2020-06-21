@@ -8,7 +8,7 @@ from api.User import User
 from api.UserChangePassword import UserChangePassword
 from api.UserList import UserList
 from api.UserLogin import UserLogin
-
+from api.Dataset.RecommendationSystem import Recommendation, WriteCSV, Search
 api = Api(app)
 
 
@@ -17,6 +17,9 @@ class Ping(Resource):
         return 'Pong'
 
 
+api.add_resource(Search, '/search/<string:query>')
+api.add_resource(Recommendation, '/rec')
+api.add_resource(WriteCSV, '/writecsv')
 api.add_resource(Role, '/roles/<ObjectId:role_id>')
 api.add_resource(RoleList, '/roles')
 api.add_resource(User, '/users/<ObjectId:user_id>')
@@ -28,5 +31,5 @@ api.add_resource(Ping, '/')
 app.wsgi_app = Middleware(app.wsgi_app)
 
 
-if __name__ == '__main__':
-    app.run()
+if __name__ == "__main__":
+    app.run(debug=True)

@@ -1,9 +1,10 @@
 .container {
   position: relative;
-  width: 95%;
-  height: 80px;
-  margin: 80px 150px 200px 50px;
+  width: 93%;
+  height: 190px;
+  margin: 200px 150px 190px 50px;
   display: block;
+  color: white;
 }
 
 .logo {
@@ -24,19 +25,35 @@
 
 .container .box {
   position: relative;
-  width: calc(280px - 30px);
-  height: calc(200px - 30px);
-  background: rgba(179, 6, 6, 0.452);
+  width: calc(220px - 70px);
+  height: calc(320px - 30px);
+  background: #606060;
   float: left;
   box-sizing: border-box;
   overflow: hidden;
-  border-radius: 8px;
+  border-radius: 25px;
 }
-.container .box:hover .content {
-  top: 130px;
-  opacity: 1;
-  cursor: pointer;
+.container .box:hover {
+  position: relative;
+  width: calc(220px - 70px);
+  height: calc(320px - 30px);
+  background: #606060;
+  float: left;
+  box-sizing: border-box;
+  overflow: hidden;
+  border-radius: 15px;
+  border-style: solid;
+  border-color: lavender;
 }
+
+.input {
+  display: none;
+}
+.input:checked + div {
+  border-style: solid;
+  border-color: white;
+}
+
 .container .box .icon {
   position: absolute;
   top: 0;
@@ -45,63 +62,110 @@
   height: 100%;
   transition: 0.5s;
   z-index: 1;
-  background: #f00;
+  background: grey;
 }
 .container .box:hover .icon {
-  top: 20px;
-  left: calc(50% - 40px);
-  width: 70px;
-  height: 70px;
+  top: -170px;
+  width: calc(100% + 80px);
   border-radius: 50%;
   cursor: pointer;
 }
 
-.container .box .icon .fa {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 40px;
+.container .box .arrowbtn {
+  position: relative;
+  top: 180px;
+  left: 30px;
+  height: cacl(100%-40px);
+  text-align: center;
+  box-sizing: border-box;
   transition: 0.5s;
-  color: #fff;
 }
-.container .box:hover .icon .fa {
-  font-size: 20px;
+.container .box:hover .arrowbtn {
+  position: relative;
+  top: 240px;
+  left: 30px;
+  height: cacl(100%-60px);
+  text-align: center;
+  box-sizing: border-box;
+  transition: 0.5s;
+  cursor: pointer;
+}
+
+.container .box .plusbtn {
+  position: relative;
+  top: 100px;
+  left: 5px;
+  box-sizing: border-box;
+  transition: 0.5s;
+}
+.container .box:hover .plusbtn {
+  position: relative;
+  top: 100px;
+  left: 7px;
+  height: cacl(100%-40px);
+  box-sizing: border-box;
+  transition: 0.5s;
   cursor: pointer;
 }
 .container .box .content {
+  font-size: 16px;
+  width: 92%;
   position: relative;
-  top: 50px;
+  top: 70px;
   height: cacl(100%-40px);
-  text-align: center;
-
+  text-align: left;
   box-sizing: border-box;
   transition: 0.5s;
 }
+
 .container .box:hover .content {
+  font-size: 16px;
+  margin-left: 20px;
+  width: 92%;
   position: relative;
-  top: 100px;
+  top: 120px;
   height: cacl(100%-40px);
-  text-align: center;
+  text-align: left;
   box-sizing: border-box;
   transition: 0.5s;
   cursor: pointer;
+  opacity: 1;
+}
+.container h3 {
+  margin: 0;
+  padding: 0;
+  color: #fff;
 }
 .container .box .content h3 {
-  margin: 0;
   padding: 0;
   color: #fff;
-  font-size: 20px;
+  font-size: 18px;
+  font-weight: bold;
 }
 .container .box .content p {
-  margin: 0;
+  margin-left: 20px;
   padding: 0;
   color: #fff;
+  font-size: 15px;
 }
+
 .block {
   height: 100%;
-  margin-top: 200px;
+  padding: 50 0 0 50;
 }
+.bodyListMovie {
+  background-color: #1f1f1f;
+}
+.eyeicon {
+  padding: 0;
+  margin: 90px 0px 0px 125px;
+}
+.details {
+  margin: -20px 0 -170px -250px;
+  padding: 0;
+  background-color: rgb(53, 52, 52);
+}
+
 /* 
 :local(.container:hover .item) {
   transform: translateX(-25%);

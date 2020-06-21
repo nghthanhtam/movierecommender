@@ -97,11 +97,12 @@ export default function CustomInput(props) {
         </InputLabel>
       ) : null}
       <Input
+        onChange={props.handleChange}
         classes={{
           input: inputClasses,
           root: marginTop,
           disabled: classes.disabled,
-          underline: underlineClasses
+          underline: underlineClasses,
         }}
         id={id}
         {...inputProps}
@@ -118,5 +119,5 @@ CustomInput.propTypes = {
   inputRootCustomClasses: PropTypes.string,
   error: PropTypes.bool,
   success: PropTypes.bool,
-  white: PropTypes.bool
+  white: PropTypes.bool,
 };

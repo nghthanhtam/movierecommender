@@ -10,7 +10,7 @@ import "assets/scss/material-kit-react.scss?v=1.8.0";
 
 // pages for this product
 import Components from "views/Components/Components.js";
-import Home from "views/Components/Home.js";
+import Home from "views/HomePage/Home.js";
 import LandingPage from "./views/LandingPage/LandingPage.js";
 import ProfilePage from "views/ProfilePage/ProfilePage.js";
 import LoginPage from "views/LoginPage/LoginPage.js"
