@@ -30,7 +30,14 @@ class MovieList extends Component {
       listMovie: [],
       poster_path: "",
       isOpenDetails: false,
-      details: { overview: "", title: "", rating: 0, id: "" },
+      details: {
+        id: "",
+        overview: "",
+        title: "",
+        rating: 0,
+        release_date: "",
+        production_companies: [],
+      },
       classes: makeStyles(styles1),
     };
   }
@@ -40,6 +47,7 @@ class MovieList extends Component {
     let value = isOpenDetails ? false : true,
       movie = listMovie.find((movie) => movie.id == movieId);
 
+    //adding user-clicking points
     this.setState({ isOpenDetails: value }, () => {
       if (isOpenDetails === true) return;
       fetch(`${process.env.REACT_APP_BACKEND_HOST}/writecsv`, {
@@ -56,6 +64,8 @@ class MovieList extends Component {
           console.log(json);
         });
     });
+    //adding user-clicking points
+
     if (value) this.myRef.current.scrollIntoView({ behavior: "smooth" });
 
     this.setState((prevState) => ({
@@ -65,6 +75,8 @@ class MovieList extends Component {
         title: movie.title,
         rating: movie.rating,
         id: movieId,
+        release_date: movie.release_date,
+        production_companies: movie.production_companies,
       },
     }));
   };
@@ -103,12 +115,15 @@ class MovieList extends Component {
             posterPath: data.poster_path,
             overview: data.overview,
             genres: data.genres,
+            release_date: data.release_date,
+            production_companies: data.production_companies,
           };
           if (this._isMounted) {
             this.setState({
               listMovie: [...this.state.listMovie, movie],
             });
           }
+          console.log(this.state.listMovie);
         });
     });
   }
