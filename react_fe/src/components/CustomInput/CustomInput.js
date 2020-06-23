@@ -24,14 +24,46 @@ export default function CustomInput(props) {
     error,
     white,
     inputRootCustomClasses,
+    changeColorOnScroll,
     success,
   } = props;
+  React.useEffect(() => {
+    if (props.changeColorOnScroll) {
+      window.addEventListener("scroll", headerColorChange);
+    }
+    return function cleanup() {
+      if (props.changeColorOnScroll) {
+        window.removeEventListener("scroll", headerColorChange);
+      }
+    };
+  });
+
+  const headerColorChange = () => {
+    const { changeColorOnScroll } = props;
+    const windowsScrollTop = window.pageYOffset;
+    if (windowsScrollTop > changeColorOnScroll.height) {
+      document
+        .getElementById("searchFilter")
+        .classList.remove(classes["whiteInput"]);
+      document
+        .getElementById("searchFilter")
+        .classList.add(classes["searchInput"]);
+      //console.log(document.getElementById("searchFilter").classList);
+    } else {
+      document
+        .getElementById("searchFilter")
+        .classList.add(classes["whiteInput"]);
+      document
+        .getElementById("searchFilter")
+        .classList.remove(classes["searchInput"]);
+    }
+  };
 
   const labelClasses = classNames({
     [" " + classes.labelRootError]: error,
     [" " + classes.labelRootSuccess]: success && !error,
   });
-  const underlineClasses = classNames({
+  let underlineClasses = classNames({
     [classes.underlineError]: error,
     [classes.underlineSuccess]: success && !error,
     [classes.underline]: true,
@@ -40,7 +72,7 @@ export default function CustomInput(props) {
   const marginTop = classNames({
     [inputRootCustomClasses]: inputRootCustomClasses !== undefined,
   });
-  const inputClasses = classNames({
+  let inputClasses = classNames({
     [classes.input]: true,
     [classes.whiteInput]: white,
   });
@@ -78,7 +110,6 @@ export default function CustomInput(props) {
     </FormControl>
   );
 }
-
 CustomInput.propTypes = {
   labelText: PropTypes.node,
   labelProps: PropTypes.object,

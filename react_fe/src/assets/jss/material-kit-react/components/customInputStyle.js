@@ -14,29 +14,37 @@ const customInputStyle = {
   underline: {
     "&:hover:not($disabled):before,&:before": {
       borderColor: "#D2D2D2 !important",
-      borderWidth: "1px !important"
+      borderWidth: "1px !important",
     },
     "&:after": {
-      borderColor: primaryColor
-    }
+      borderColor: primaryColor,
+    },
   },
   underlineError: {
     "&:after": {
-      borderColor: dangerColor
-    }
+      borderColor: dangerColor,
+    },
   },
   underlineSuccess: {
     "&:after": {
-      borderColor: successColor
-    }
+      borderColor: successColor,
+    },
+  },
+  searchUnderline: {
+    "&:hover:not($disabled):before,&:before": {
+      borderColor: "#555",
+    },
+    "&:after": {
+      borderColor: "#555",
+    },
   },
   whiteUnderline: {
     "&:hover:not($disabled):before,&:before": {
-      borderColor: "#FFFFFF"
+      borderColor: "#FFFFFF",
     },
     "&:after": {
-      borderColor: "#FFFFFF"
-    }
+      borderColor: "#FFFFFF",
+    },
   },
   labelRoot: {
     ...defaultFont,
@@ -47,14 +55,14 @@ const customInputStyle = {
     top: "10px",
     letterSpacing: "unset",
     "& + $underline": {
-      marginTop: "0px"
-    }
+      marginTop: "0px",
+    },
   },
   labelRootError: {
-    color: dangerColor + " !important"
+    color: dangerColor + " !important",
   },
   labelRootSuccess: {
-    color: successColor + " !important"
+    color: successColor + " !important",
   },
   formControl: {
     margin: "0 0 17px 0",
@@ -63,6 +71,7 @@ const customInputStyle = {
     "& svg,& .fab,& .far,& .fal,& .fas,& .material-icons": {
       color: "#495057"
     }
+
   },
   input: {
     color: "#495057",
@@ -77,13 +86,20 @@ const customInputStyle = {
     "&::placeholder": {
       color: "#AAAAAA"
     }
+
   },
   whiteInput: {
     "&,&::placeholder": {
       color: "#FFFFFF",
-      opacity: "1"
-    }
-  }
+      opacity: "1",
+    },
+  },
+  searchInput: {
+    "&,&::placeholder": {
+      color: "inherit",
+      opacity: "1",
+    },
+  },
 };
 
 export default customInputStyle;

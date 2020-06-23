@@ -1,4 +1,5 @@
 {
   "python.pythonPath": "flask_be\\venv\\Scripts\\python.exe",
-  "git.ignoreLimitWarning": true
+  "git.ignoreLimitWarning": true,
+  "python.linting.pylintPath": "flask_be\\venv\\Scripts\\pylint.exe"
 }
