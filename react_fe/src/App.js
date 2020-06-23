@@ -13,11 +13,10 @@ import Components from "views/Components/Components.js";
 import Home from "views/HomePage/Home.js";
 import LandingPage from "./views/LandingPage/LandingPage.js";
 import ProfilePage from "views/ProfilePage/ProfilePage.js";
-import LoginPage from "views/LoginPage/LoginPage.js"
+import LoginPage from "views/LoginPage/LoginPage.js";
 import Layout from "./Layout";
 import SignUp from "./views/SignUpPage/SignUp";
 // import PrivateRoute from "./PrivateRoute";
-
 // export default function App(props){
 //   const [isLogedIn, setLogedIn] = React.useState( true ? 'haha': 'hoho')
 //   const classes = useStyles();
@@ -27,6 +26,12 @@ import SignUp from "./views/SignUpPage/SignUp";
 class App extends Component {
   state = {
     token: localStorage.getItem("token"),
+    query: "",
+  };
+
+  onQueryChange = (query) => {
+    console.log(query);
+    this.setState({ query: query });
   };
 
   userLogin = () => {
@@ -39,12 +44,17 @@ class App extends Component {
   };
 
   render() {
-    const { token } = this.state;
-    const { userLogin, userLogout } = this;
+    const { token, query } = this.state;
+    const { userLogin, userLogout, onQueryChange } = this;
 
     return (
       <Router history={createBrowserHistory()}>
-        <Layout userLogin={userLogin} userLogout={userLogout} token={token}>
+        <Layout
+          userLogin={userLogin}
+          userLogout={userLogout}
+          token={token}
+          onQueryChange={onQueryChange}
+        >
           <Switch>
             <Route
               path="/landing-page"
@@ -69,7 +79,14 @@ class App extends Component {
               path="/home"
               render={(props) => {
                 if (token)
-                  return <Home {...props} token={token} component={Home} />;
+                  return (
+                    <Home
+                      {...props}
+                      token={token}
+                      query={query}
+                      component={Home}
+                    />
+                  );
                 else return <Redirect to="/login" />;
               }}
             />

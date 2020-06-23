@@ -11,7 +11,14 @@ import { useLocation } from "react-router-dom";
 const useStyles = makeStyles(styles);
 
 export default function Layout(props) {
-  const { token, children, userLogout, userLogin, ...rest } = props;
+  const {
+    token,
+    children,
+    userLogout,
+    userLogin,
+    onQueryChange,
+    ...rest
+  } = props;
   const classes = useStyles();
   const location = useLocation();
   const { pathname } = location;
@@ -42,6 +49,7 @@ export default function Layout(props) {
                 color: "white",
               }}
               userLogout={userLogout}
+              onQueryChange={onQueryChange}
             />
           }
           fixed

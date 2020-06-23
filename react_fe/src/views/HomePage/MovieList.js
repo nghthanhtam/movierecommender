@@ -81,7 +81,7 @@ class MovieList extends Component {
       list.movie_data.shift();
     } else if (list.type === "popular") {
       panelTitle = "Popular Movies For You";
-    } else {
+    } else if (list.type == "colla") {
       panelTitle = "You May Also Like";
     }
     this.setState({ panelTitle: panelTitle });

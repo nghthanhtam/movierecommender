@@ -48,7 +48,7 @@ export default function CustomInput(props) {
       document
         .getElementById("searchFilter")
         .classList.add(classes["searchInput"]);
-      console.log(document.getElementById("searchFilter").classList);
+      //console.log(document.getElementById("searchFilter").classList);
     } else {
       document
         .getElementById("searchFilter")
