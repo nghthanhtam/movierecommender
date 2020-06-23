@@ -4,7 +4,9 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import CountVectorizer
 import numpy as np
 import pandas as pd
+from flask import request
 from app import response
+from datetime import datetime
 from flask_restful import Resource
 
 
@@ -220,7 +222,6 @@ class Search(Resource):
 
 class WriteCSV(Resource):
     def post(self):
-
         data = request.get_json()
         mean_rating = data['rating']
         if mean_rating == -2:
