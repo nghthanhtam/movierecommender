@@ -81,7 +81,7 @@ export default function MovieDetails(props) {
                     tabIcon: Dashboard,
                     tabContent: (
                       <>
-                        <span style={{ color: "white", fontSize: "18px" }}>
+                        <span style={{ color: "white", fontSize: "17px" }}>
                           <h3>{details.title} </h3>
                           {details.overview ? details.overview : ""}
                           <br />
@@ -114,7 +114,7 @@ export default function MovieDetails(props) {
                     tabIcon: Face,
                     tabContent: (
                       <>
-                        <span style={{ color: "white", fontSize: "18px" }}>
+                        <span style={{ color: "white", fontSize: "17px" }}>
                           <h3> </h3>
                           The movie stars
                           {castlist[0] && castlist[0].name},
@@ -135,10 +135,23 @@ export default function MovieDetails(props) {
                     tabIcon: RateReviewIcon,
                     tabContent: (
                       <>
-                        <span style={{ color: "white", fontSize: "18px" }}>
+                        <h3>Release date: </h3>
+                        <span style={{ color: "white", fontSize: "17px" }}>
                           {details.release_date}
                           <br />
                         </span>
+                        <h3>Production companies: </h3>
+                        {details.production_companies.map((com, index) => {
+                          return (
+                            <span
+                              key={index}
+                              style={{ color: "white", fontSize: "17px" }}
+                            >
+                              {com.name}
+                              <br />
+                            </span>
+                          );
+                        })}
                       </>
                     ),
                   },

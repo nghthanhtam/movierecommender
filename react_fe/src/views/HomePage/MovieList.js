@@ -18,6 +18,7 @@ class MovieList extends Component {
     super(props);
     this.myRef = React.createRef();
     this.onChaonOpenDetClicknge = this.onOpenDetClick.bind(this);
+    this.addToMyList = this.addToMyList.bind(this);
     this.state = {
       settings: {
         infinite: true,
@@ -42,6 +43,10 @@ class MovieList extends Component {
     };
   }
 
+  addToMyList = (event, movieId) => {
+    console.log("avc");
+  };
+
   onOpenDetClick = (event, movieId) => {
     let { isOpenDetails, listMovie } = this.state;
     let value = isOpenDetails ? false : true,
@@ -61,7 +66,7 @@ class MovieList extends Component {
           return response.json();
         })
         .then((json) => {
-          console.log(json);
+          //console.log(json);
         });
     });
     //adding user-clicking points
@@ -123,7 +128,6 @@ class MovieList extends Component {
               listMovie: [...this.state.listMovie, movie],
             });
           }
-          console.log(this.state.listMovie);
         });
     });
   }
@@ -168,7 +172,10 @@ class MovieList extends Component {
                     ref={this.myRef}
                   ></div>
 
-                  <IconButton className={styles.plusbtn}>
+                  <IconButton
+                    className={styles.plusbtn}
+                    onClick={(e) => this.addToMyList(e, movie.id)}
+                  >
                     <SvgIcon>
                       <path d="M12 20.016q3.281 0 5.648-2.367t2.367-5.648-2.367-5.648-5.648-2.367-5.648 2.367-2.367 5.648 2.367 5.648 5.648 2.367zM12 2.016q4.125 0 7.055 2.93t2.93 7.055-2.93 7.055-7.055 2.93-7.055-2.93-2.93-7.055 2.93-7.055 7.055-2.93zM12.984 6.984v4.031h4.031v1.969h-4.031v4.031h-1.969v-4.031h-4.031v-1.969h4.031v-4.031h1.969z" />
                     </SvgIcon>

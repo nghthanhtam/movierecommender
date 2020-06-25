@@ -45,7 +45,7 @@ function Home(props) {
         arrTemp.push(el);
       });
       setList(arrTemp);
-      console.log(data.movie);
+      //console.log(data.movie);
     }
     fetchData();
   }, []);
@@ -102,7 +102,6 @@ function Home(props) {
         </div>
       </Parallax>
 
-      {/* <div className={classNames(classes.main, classes.mainRaised)}> */}
       <div styles={{ display: "block" }}>
         {list.map((similar_movies, index) => {
           return (
@@ -115,7 +114,6 @@ function Home(props) {
           );
         })}
       </div>
-      {/* </div> */}
     </div>
   );
 }

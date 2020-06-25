@@ -123,7 +123,7 @@ class Recommendation(Resource):
             res.append(
                 {'type': 'popular', 'movie_data': list_popular_movie_temp})
 
-            # Collaborative recommend
+            # Collaborative recomme nd
             ratings = pd.merge(all_dataframe, all_ratings).drop(
                 ['genres', 'timestamp'], axis=1)
 
