@@ -36,7 +36,6 @@ export default function Layout(props) {
             color: "white",
           }}
           token={token}
-          userLogout={userLogout}
           {...rest}
         />
       ) : (

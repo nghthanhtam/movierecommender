@@ -19,7 +19,7 @@ class UserList(Resource):
         return output, 200
 
     def delete(self):
-        ret = mongo.db.user.remove({})
+        mongo.db.user.remove({})
         return response("Deleted all users!", 200)
 
     def post(self):
@@ -31,16 +31,12 @@ class UserList(Resource):
         fullname = data['fullname']
         role = data['role']
         one_user = mongo.db.user.find_one()
-        print('---------------LAST USER---------------------')
-        print(one_user)
         if one_user is None:
             dataframe = pd.read_csv('ratings.csv')
             row = dataframe.nlargest(1, 'userId')
             largest_user_id = row['userId'].values[0]
             largest_user_id = largest_user_id + 1
             user_id = largest_user_id.item()
-            print('------------------------------------')
-            print(user_id)
         else:
             last_user = mongo.db.user.find().limit(1).sort([("$natural", -1)])
             for x in last_user:
@@ -56,5 +52,5 @@ class UserList(Resource):
             return response("Password doesn't match!", 400)
         hashed_password = generate_password_hash(password, method='sha256')
         mongo.db.user.insert_one(
-            {'username': username, 'email': email, 'fullname': fullname, 'userId': user_id, 'hashed_password': hashed_password, 'role': role})
+            {'username': username, 'email': email, 'fullname': fullname, 'userId': user_id, 'hashed_password': hashed_password, 'role': role, 'firstTimeUse': True})
         return response('Used created successfully', 200)
