@@ -44,7 +44,7 @@ class Recommendation(Resource):
                     thewriter = csv.writer(f)
                     thewriter.writerow([user_id, genres,datetime.timestamp(datetime.now())])
 
-            def get_rec_movies_on_genres(query):
+            def get_movies_from_genres(query):
                 dataframe = pd.read_csv("movies_metadata.csv")
 
                 def get_kw(row):
@@ -72,7 +72,7 @@ class Recommendation(Resource):
                 dataframe['combined_features']
                 dataframe = dataframe[dataframe['combined_features'].str.lower().str.contains(
                     query, regex=False)]
-                dataframe = dataframe.nlargest(13, ['vote_average'])
+                dataframe = dataframe.nlargest(12, ['vote_average'])
 
                 res = []
                 temp = []
@@ -94,18 +94,32 @@ class Recommendation(Resource):
                         {'id': int(movieid), 'title': '', 'rating': rating})
                 res.append(
                     {'type': 'popular', 'movie_data': list_popular_movie_temp})
-            
-            get_popular_movies(dataframe)
-
-            #get movies based on genres a NEW USER chose
-            if genres is not None and genres != '-1':
-                write_csv()
-                genres_text = genres.split('|')
+            def get_rec_genres_movies(arr_genres):
+                genres_text = arr_genres.split('|')
                 for g in genres_text:
                     if g != '':
-                        arr = get_rec_movies_on_genres(g)["result"]
+                        arr = get_movies_from_genres(g)["result"]
                         for i in arr:
                             res.append({'type':'genres|'+g.title(),'movie_data':i["movie_data"]})
+
+            #get movies based on genres a NEW USER chose on dialog
+            def get_movies_from_genres_dialog():
+                if genres is not None and genres != '-1':
+                    write_csv()
+                    get_rec_genres_movies(genres)
+
+            #get movies based on genres a NEW USER chose which are saved in csv
+            def get_movies_from_genres_csv():
+                genres_df = pd.read_csv('genres.csv')
+                genres_df = genres_df.nlargest(1, ['timestamp'])
+                genres_df = genres_df[genres_df.userId == int(user_id)]
+                ratings_df = all_ratings[all_ratings.userId == int(user_id)]
+                if not genres_df.empty and ratings_df.empty:
+                    get_rec_genres_movies(genres_df["genres"].values[0])
+
+            get_popular_movies(dataframe)
+            get_movies_from_genres_dialog()
+            get_movies_from_genres_csv()
 
             # filter user and his favorite movies
             ratings = all_ratings[all_ratings.userId == int(user_id)]
@@ -230,6 +244,7 @@ class Recommendation(Resource):
                     {'type': 'colla', 'movie_data': colla_similar_movies_id})
             
             #-1 means NEW USER skip choosing his fav genres
+            #the second condition means old user but has no interations with the system
             if genres != '-1' or not all_ratings[all_ratings.userId == int(user_id)].empty:
                 get_contentbased_movies()
                 get_colla_movies()
@@ -240,7 +255,6 @@ class Recommendation(Resource):
 
 class Search(Resource):
     def get(self, query):
-        print(query)
         dataframe = pd.read_csv("movies_metadata.csv")
 
         def get_kw(row):
@@ -267,8 +281,8 @@ class Search(Resource):
             combined_features, axis=1)
         dataframe['combined_features']
         dataframe = dataframe[dataframe['combined_features'].str.lower().str.contains(
-            query, regex=False)]
-        #dataframe = dataframe.nlargest(20, ['vote_average'])
+            query.lower(), regex=False)]
+        dataframe = dataframe.nlargest(20, ['vote_average'])
 
         res = []
         temp = []
@@ -293,7 +307,6 @@ class WriteCSV(Resource):
             ratings = pd.read_csv('ratings.csv')
             ratings = ratings[ratings.userId == data['userid']]
             mean_rating = ratings["rating"].mean() + 0.5
-            print(mean_rating)
         with open('ratings.csv', 'a', newline='') as f:
             thewriter = csv.writer(f)
             ratings = pd.read_csv("ratings.csv")

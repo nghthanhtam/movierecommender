@@ -37,7 +37,7 @@ class MovieList extends Component {
   onOpenDetClick = (event, movieId) => {
     let { isOpenDetails, listMovie } = this.state;
     let value = isOpenDetails ? false : true,
-      movie = listMovie.find((movie) => movie.id == movieId);
+      movie = listMovie.find((movie) => movie.id === movieId);
 
     this.setState({ isOpenDetails: value }, () => {
       if (isOpenDetails === true) return;
@@ -73,7 +73,7 @@ class MovieList extends Component {
       apiKey = "a1e04f21511bd27a683b88ebc97b8446",
       panelTitle = "",
       splitText = "";
-    if (list.length == 0) return;
+    if (list.length === 0) return;
     this._isMounted = true;
 
     if (list.type.includes("|")) {
@@ -86,7 +86,7 @@ class MovieList extends Component {
       list.movie_data.shift();
     } else if (list.type === "popular") {
       panelTitle = "Popular Movies For You";
-    } else if (list.type == "colla") {
+    } else if (list.type === "colla") {
       panelTitle = "You May Also Like";
     } else if (list.type === "genres") {
       panelTitle = "Popular " + splitText[1] + " Shows";

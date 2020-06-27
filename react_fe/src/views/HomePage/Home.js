@@ -1,17 +1,15 @@
 import React, { useState, useEffect, Fragment } from "react";
-import GenreDialog from "../Model/GenreDialog";
-
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { makeStyles } from "@material-ui/core/styles";
 import styles1 from "assets/jss/material-kit-react/views/components.js";
 import styles from "../../assets/css/scroll-pane.module.css";
-import stylesHeaderLink from "assets/jss/material-kit-react/components/headerLinksStyle.js";
 
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
 import Parallax from "components/Parallax/Parallax.js";
 import MovieList from "./MovieList.js";
+import GenreDialog from "../Model/GenreDialog";
 
 const useStyles = makeStyles(styles1);
 
@@ -77,7 +75,7 @@ function Home(props) {
 
   const getRecommendedMovies = (text) => {
     let idUser = 592;
-    console.log(text);
+    //console.log(text);
     fetch(`${process.env.REACT_APP_BACKEND_HOST}/rec/` + idUser + "/" + text)
       .then((res) => res.json())
       .then((data) => {

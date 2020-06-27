@@ -6,10 +6,8 @@ import { makeStyles } from "@material-ui/core/styles";
 
 // @material-ui/icons
 import Dashboard from "@material-ui/icons/Dashboard";
-import Schedule from "@material-ui/icons/Schedule";
 import Face from "@material-ui/icons/Face";
 import RateReviewIcon from "@material-ui/icons/RateReview";
-import List from "@material-ui/icons/List";
 
 // core components
 import GridContainer from "components/Grid/GridContainer.js";

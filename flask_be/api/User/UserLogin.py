@@ -14,7 +14,6 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 class UserLogin(Resource):
     def post(self):
-        print('haha')
         data = request.get_json()
         password = data['password']
         email = data['email']
