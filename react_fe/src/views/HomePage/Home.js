@@ -18,35 +18,67 @@ const useStyles = makeStyles(styles1);
 function Home(props) {
   const classes = useStyles();
   const [list, setList] = useState([]);
+  const [userGenre, setUserGenre] = useState("-1");
+  const [isModelClose, setIsModelClose] = useState(false);
   const { query, payload } = props;
   const { firstTimeUse, fullname, id } = payload;
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     const response = await fetch(`${process.env.REACT_APP_BACKEND_HOST}/rec`);
-  //     const data = await response.json();
-  //     let arrTemp = [];
-  //     data.movie.map((el) => {
-  //       //el.shift(); //bỏ phim đàu tiên đi, vì đó là phim dựa vào để recommend
-  //       arrTemp.push(el);
-  //     });
-  //     setList(arrTemp);
-  //     console.log(data.movie);
-  //   }
-  // fetchData();
-  // }, []);
 
-  // useEffect(() => {
-  //   if (query.length > 2) {
-  //     getSearchedMovies();
-  //   } else {
-  //     if (query.length == 0) {
-  //       getRecommendedMovies();
-  //     }
-  //   }
-  // }, [query]);
+  useEffect(() => {
+    if ((firstTimeUse && isModelClose) || firstTimeUse === false) {
+      getRecommendedMovies(userGenre);
+      // fetch(
+      //   `${process.env.REACT_APP_BACKEND_HOST}/rec/` + userId + "/" + "-1"
+      // )
+      //   .then((res) => res.json())
+      //   .then((data) => {
+      //     let arrTemp = [];
+      //     data.movie.map((el) => {
+      //       //el.shift(); //bỏ phim đàu tiên đi, vì đó là phim dựa vào để recommend
+      //       arrTemp.push(el);
+      //     });
+      //     setList(arrTemp);
+      //     console.log(data.movie);
+      //   });
+    }
 
-  const getRecommendedMovies = () => {
-    fetch(`${process.env.REACT_APP_BACKEND_HOST}/rec`)
+    // async function fetchData() {
+    //   const response = await fetch(`${process.env.REACT_APP_BACKEND_HOST}/rec`);
+    //   const data = await response.json();
+    //   let arrTemp = [];
+    //   data.movie.map((el) => {
+    //     //el.shift(); //bỏ phim đàu tiên đi, vì đó là phim dựa vào để recommend
+    //     arrTemp.push(el);
+    //   });
+    //   setList(arrTemp);
+    //   console.log(data.movie);
+    // }
+    // fetchData();
+  }, []);
+
+  useEffect(() => {
+    //firstTimeUse && isModelClose: user dùng lần đầu và chọn xong
+    //firstTimeUse === false: ko phải user dùng lần đầu
+    if ((firstTimeUse && isModelClose) || firstTimeUse === false) {
+      if (query.length > 2) {
+        getSearchedMovies();
+      } else {
+        if (query.length == 0) {
+          getRecommendedMovies("-1");
+        }
+      }
+    }
+  }, [query]);
+
+  const onChangeRecList = (text) => {
+    setUserGenre(text);
+    getRecommendedMovies(text);
+    setIsModelClose(true);
+  };
+
+  const getRecommendedMovies = (text) => {
+    let idUser = 592;
+    console.log(text);
+    fetch(`${process.env.REACT_APP_BACKEND_HOST}/rec/` + idUser + "/" + text)
       .then((res) => res.json())
       .then((data) => {
         let arrTemp = [];
@@ -100,7 +132,11 @@ function Home(props) {
         </div>
       </div>
 
-      <GenreDialog open={firstTimeUse} id={id}></GenreDialog>
+      <GenreDialog
+        open={firstTimeUse}
+        onSave={onChangeRecList}
+        id={id}
+      ></GenreDialog>
     </Fragment>
   );
 }

@@ -71,10 +71,16 @@ class MovieList extends Component {
   componentDidMount() {
     let { list } = this.props,
       apiKey = "a1e04f21511bd27a683b88ebc97b8446",
-      panelTitle = "";
+      panelTitle = "",
+      splitText = "";
     if (list.length == 0) return;
     this._isMounted = true;
 
+    if (list.type.includes("|")) {
+      console.log(list.type);
+      splitText = list.type.split("|");
+      list.type = splitText[0];
+    }
     if (list.type === "recommend") {
       panelTitle = "Because You Liked " + list.movie_data[0].title;
       list.movie_data.shift();
@@ -82,6 +88,8 @@ class MovieList extends Component {
       panelTitle = "Popular Movies For You";
     } else if (list.type == "colla") {
       panelTitle = "You May Also Like";
+    } else if (list.type === "genres") {
+      panelTitle = "Popular " + splitText[1] + " Shows";
     }
     this.setState({ panelTitle: panelTitle });
 

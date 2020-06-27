@@ -19,7 +19,7 @@ class Ping(Resource):
 
 
 api.add_resource(Search, '/search/<string:query>')
-api.add_resource(Recommendation, '/rec')
+api.add_resource(Recommendation, '/rec/<string:user_id>/<string:genres>')
 api.add_resource(WriteCSV, '/writecsv')
 api.add_resource(Role, '/roles/<ObjectId:role_id>')
 api.add_resource(RoleList, '/roles')

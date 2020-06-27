@@ -103,6 +103,7 @@ export default function GenreDialog(props) {
       )
       .then((res) => {
         changeOpenInDialog(false);
+        props.onSave("-1");
       })
       .catch((er) => {
         history.push("/404");
@@ -111,6 +112,17 @@ export default function GenreDialog(props) {
   const handleSave = () => {
     // Nhớ đặt lệnh này trong phần .then của mày để đóng modal :D
     changeOpenInDialog(false);
+    let text = "";
+    if (checkboxDrama) text += "|drama";
+    if (checkboxFamily) text += "|family";
+    if (checkboxHorror) text += "|horror";
+    if (checkboxFantasy) text += "|fantasy";
+    if (checkboxAnimation) text += "|animation";
+    if (checkboxComedy) text += "|comedy";
+    if (checkboxRomance) text += "|romance";
+    if (checkboxAction) text += "|action";
+    if (checkboxHistory) text += "|history";
+    props.onSave(text);
   };
 
   const handleCheckboxChange = (event) => {
