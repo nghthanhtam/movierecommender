@@ -32,10 +32,10 @@ class Recommendation(Resource):
                 return dataframe[dataframe.index == index]["poster_path"].values[0]
 
             def get_rating_from_movieid(movieId, userId, all_ratings):
-                rating = all_ratings[all_ratings.movieId ==
-                                     movieId][all_ratings.userId == userId]["rating"].values
-                if len(rating) != 0:
-                    return rating[0]
+                df = all_ratings.nlargest(1, ['timestamp'])
+                df = df[df.movieId == movieId][df.userId == userId]["rating"]
+                if not df.empty:
+                    return df.values[0]
                 else:
                     return 0
 
@@ -312,6 +312,7 @@ class WriteCSV(Resource):
             ratings = pd.read_csv("ratings.csv")
             ratings = ratings[ratings.movieId ==
                               data["id"]][ratings.userId == 592]
+            ratings = ratings.nlargest(1, ['timestamp'])
             if not ratings.empty and data['rating'] == -2:
                 return response('Failed to add rating', 200)
             if not ratings.empty and ratings["rating"].values[0] == mean_rating:
