@@ -30,11 +30,12 @@ class Recommendation(Resource):
             def get_posterpath_from_index(index):
                 return dataframe[dataframe.index == index]["poster_path"].values[0]
 
-            def get_rating_from_movieid(movieId, userId, all_ratings):
-                df = all_ratings.nlargest(1, ['timestamp'])
-                df = df[df.movieId == movieId][df.userId == userId]["rating"]
+            def get_rating_from_movieid(movieId, userId):
+                all_ratings = pd.read_csv('ratings.csv')
+                df = all_ratings[all_ratings.movieId == int(movieId)][all_ratings.userId == int(userId)]
+                df = df.nlargest(1, ['timestamp'])
                 if not df.empty:
-                    return df.values[0]
+                    return df["rating"].values[0]
                 else:
                     return 0
 
@@ -88,7 +89,7 @@ class Recommendation(Resource):
                 list_popular_movie = np.asarray(dataframe['movieId'])
                 list_popular_movie_temp = []
                 for movieid in list_popular_movie:
-                    rating = get_rating_from_movieid(movieid, user_id, all_ratings)
+                    rating = get_rating_from_movieid(movieid, user_id)
                     list_popular_movie_temp.append(
                         {'id': int(movieid), 'title': '', 'rating': rating})
                 res.append(
@@ -186,7 +187,7 @@ class Recommendation(Resource):
                     for movie in list_movie:
                         movieid = int(get_id_from_index(movie[0]))
                         title = get_title_from_index(movie[0])
-                        rating = get_rating_from_movieid(movieid, user_id, all_ratings)
+                        rating = get_rating_from_movieid(movieid, user_id)
                         list_temp.append(
                             {'id': movieid, 'title': title, 'rating': rating})
                         count = count + 1
@@ -234,7 +235,7 @@ class Recommendation(Resource):
                     count = count + 1
                     # get column name with specific value (ratings)
                     movieId = (colla_similar_movies == movie).idxmax(axis=1)
-                    rating = get_rating_from_movieid(movieId, user_id, all_ratings)
+                    rating = get_rating_from_movieid(movieId, user_id)
                     colla_similar_movies_id.append(
                         {'id': int(movieId), 'rating': rating})
                     if count > 11:

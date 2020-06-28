@@ -123,7 +123,6 @@ class MovieList extends Component {
           let movie = {
             id: item.id,
             rating: item.rating % 1 == 0 ? item.rating : 0,
-            rating: item.rating,
             title: data.title,
             posterPath: data.poster_path,
             overview: data.overview,
@@ -131,6 +130,7 @@ class MovieList extends Component {
             release_date: data.release_date,
             production_companies: data.production_companies,
           };
+          console.log(item);
           if (this._isMounted) {
             this.setState({
               listMovie: [...this.state.listMovie, movie],

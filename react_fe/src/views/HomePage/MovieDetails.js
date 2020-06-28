@@ -56,7 +56,6 @@ export default function MovieDetails(props) {
         arrTemp.push(el);
       });
       setCast(arrTemp);
-      console.log(props.details);
     }
     fetchData();
   }, []);
