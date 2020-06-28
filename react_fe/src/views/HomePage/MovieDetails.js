@@ -56,6 +56,7 @@ export default function MovieDetails(props) {
         arrTemp.push(el);
       });
       setCast(arrTemp);
+      console.log(props.details);
     }
     fetchData();
   }, []);
@@ -78,9 +79,9 @@ export default function MovieDetails(props) {
                     tabIcon: Dashboard,
                     tabContent: (
                       <>
-                        <span style={{ color: "white" }}>
+                        <span style={{ color: "white", fontSize: "17px" }}>
                           <h3>{details.title} </h3>
-                          <p>{details.overview ? details.overview : ""}</p>
+                          {details.overview ? details.overview : ""}
                           <br />
                         </span>
                         <div
@@ -111,44 +112,45 @@ export default function MovieDetails(props) {
                     tabIcon: Face,
                     tabContent: (
                       <>
-                        <span style={{ color: "white" }}>
+                        <span style={{ color: "white", fontSize: "17px" }}>
                           <h3> </h3>
-                          <p>
-                            The movie stars {castlist[0] && castlist[0].name},
-                            {castlist[1] && castlist[1].name},
-                            {castlist[2] && castlist[2].name},{" "}
-                            {castlist[3] && castlist[3].name},{" "}
-                            {castlist[4] && castlist[4].name},{" "}
-                            {castlist[5] && castlist[5].name} as the
-                            protagonists, makes it achieve significant critical
-                            and commercial success since its released day
-                          </p>
-
+                          The movie stars
+                          {castlist[0] && castlist[0].name},
+                          {castlist[1] && castlist[1].name},
+                          {castlist[2] && castlist[2].name},{" "}
+                          {castlist[3] && castlist[3].name},{" "}
+                          {castlist[4] && castlist[4].name},{" "}
+                          {castlist[5] && castlist[5].name} as the protagonists,
+                          makes it achieve significant critical and commercial
+                          success since its released day
                           <br />
                         </span>
                       </>
                     ),
                   },
                   {
-                    tabButton: "Rate",
+                    tabButton: "More Info",
                     tabIcon: RateReviewIcon,
                     tabContent: (
-                      <span>
-                        <p>
-                          Efficiently unleash cross-media information without
-                          cross-media value. Quickly maximize timely
-                          deliverables for real-time schemas.
-                        </p>
-                        <br />
-                        <p>
-                          Dramatically maintain clicks-and-mortar solutions
-                          without functional solutions. Dramatically visualize
-                          customer directed convergence without revolutionary
-                          ROI. Collaboratively administrate empowered markets
-                          via plug-and-play networks. Dynamically procrastinate
-                          B2C users after installed base benefits.
-                        </p>
-                      </span>
+                      <>
+                        <h3>Release date: </h3>
+                        <span style={{ color: "white", fontSize: "17px" }}>
+                          {details.release_date}
+                          <br />
+                        </span>
+                        <h3>Production companies: </h3>
+                        {details.production_companies.map((com, index) => {
+                          return (
+                            <span
+                              key={index}
+                              style={{ color: "white", fontSize: "17px" }}
+                            >
+                              {com.name}
+                              <br />
+                            </span>
+                          );
+                        })}
+                      </>
                     ),
                   },
                 ]}

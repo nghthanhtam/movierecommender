@@ -18,6 +18,7 @@ import Layout from "./Layout";
 import SignUp from "./views/SignUpPage/SignUp";
 import ErrorPage from "./views/Error/404";
 import jwt from "jsonwebtoken";
+import MyList from "./views/MyListPage/MyList";
 // import PrivateRoute from "./PrivateRoute";
 // export default function App(props){
 //   const [isLogedIn, setLogedIn] = React.useState( true ? 'haha': 'hoho')
@@ -86,6 +87,12 @@ class App extends Component {
               render={(props) => {
                 if (token) return <Redirect to="/home" />;
                 else return <LoginPage {...props} userLogin={userLogin} />;
+              }}
+            />
+            <Route
+              path="/mylist"
+              render={(props) => {
+                return <MyList {...props} userLogin={userLogin} />;
               }}
             />
             <Route

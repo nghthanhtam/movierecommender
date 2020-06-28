@@ -319,6 +319,7 @@ export default function SectionNavbars() {
                     }}
                     dropdownList={[
                       "Me",
+                      "My List",
                       "Settings and other stuff",
                       "Sign out",
                     ]}

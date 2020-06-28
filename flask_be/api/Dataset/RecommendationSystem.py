@@ -10,7 +10,6 @@ from app import response
 from datetime import datetime
 from flask_restful import Resource
 
-
 class Recommendation(Resource):
     def get(self,user_id,genres):
         def recommend():
@@ -303,15 +302,15 @@ class WriteCSV(Resource):
     def post(self):
         data = request.get_json()
         mean_rating = data['rating']
+        #rating param = -2 represents user-clicking point, not user rating
         if mean_rating == -2:
             ratings = pd.read_csv('ratings.csv')
             ratings = ratings[ratings.userId == data['userid']]
-            mean_rating = ratings["rating"].mean() + 0.5
+            mean_rating = ratings["rating"].mean() #calculate mean rating of current user
         with open('ratings.csv', 'a', newline='') as f:
             thewriter = csv.writer(f)
             ratings = pd.read_csv("ratings.csv")
-            ratings = ratings[ratings.movieId ==
-                              data["id"]][ratings.userId == 592]
+            ratings = ratings[ratings.movieId == data["id"]][ratings.userId == 592]
             ratings = ratings.nlargest(1, ['timestamp'])
             if not ratings.empty and data['rating'] == -2:
                 return response('Failed to add rating', 200)
