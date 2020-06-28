@@ -115,7 +115,8 @@ class MovieList extends Component {
         .then((data) => {
           let movie = {
             id: item.id,
-            rating: item.rating % 1 === 0 ? item.rating : 0,
+            rating: item.rating % 1 == 0 ? item.rating : 0,
+            rating: item.rating,
             title: data.title,
             posterPath: data.poster_path,
             overview: data.overview,
