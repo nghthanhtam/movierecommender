@@ -131,69 +131,69 @@ class Recommendation(Resource):
             ratings = ratings.nlargest(3, ['timestamp'])
 
             # Content-based recommend
-            def get_contentbased_movies():
-                def get_kw(row):
-                    row = ast.literal_eval(row)
-                    res = ''
-                    for i in row:
-                        res += i['name']+' '
-                    return res
+            # def get_contentbased_movies():
+            #     def get_kw(row):
+            #         row = ast.literal_eval(row)
+            #         res = ''
+            #         for i in row:
+            #             res += i['name']+' '
+            #         return res
 
-                # Step 2: Select Features
-                features = ['keywords', 'genres']  # keyword, cast overview
+            #     # Step 2: Select Features
+            #     features = ['keywords', 'genres']  # keyword, cast overview
 
-                # Step 3: Create a column in dataframe which combines all selected features
-                for feature in features:
-                    dataframe[feature] = dataframe[feature].fillna('')
+            #     # Step 3: Create a column in dataframe which combines all selected features
+            #     for feature in features:
+            #         dataframe[feature] = dataframe[feature].fillna('')
 
-                def combined_features(row):
-                    try:
-                        return get_kw(row['keywords']) + " " + get_kw(row['genres'])
-                    except:
-                        print("Error: ", row)
+            #     def combined_features(row):
+            #         try:
+            #             return get_kw(row['keywords']) + " " + get_kw(row['genres'])
+            #         except:
+            #             print("Error: ", row)
 
-                dataframe['combined_features'] = dataframe.apply(
-                    combined_features, axis=1)  # apply function to each row
+            #     dataframe['combined_features'] = dataframe.apply(
+            #         combined_features, axis=1)  # apply function to each row
 
-                # Step 4: Create count matrix from this new combined column
-                cv = CountVectorizer()
-                count_matrix = cv.fit_transform(dataframe["combined_features"])
+            #     # Step 4: Create count matrix from this new combined column
+            #     cv = CountVectorizer()
+            #     count_matrix = cv.fit_transform(dataframe["combined_features"])
 
-                # Step 5: Compute the Cosine Similarity based on the count_matrix
-                cosine_sim = cosine_similarity(count_matrix)
+            #     # Step 5: Compute the Cosine Similarity based on the count_matrix
+            #     cosine_sim = cosine_similarity(count_matrix)
 
-                # Step 6: Get index of this movie from its title
-                list_movie_index = []
-                for movieId in ratings["movieId"]:
-                    movie_index = get_index_from_movieid(movieId)
-                    list_movie_index.append(movie_index)
+            #     # Step 6: Get index of this movie from its title
+            #     list_movie_index = []
+            #     for movieId in ratings["movieId"]:
+            #         movie_index = get_index_from_movieid(movieId)
+            #         list_movie_index.append(movie_index)
 
-                list_similar_movies = []
-                for movie_index in list_movie_index:
-                    similar_movies = list(enumerate(cosine_sim[movie_index]))
-                    list_similar_movies.append(similar_movies)
+            #     list_similar_movies = []
+            #     for movie_index in list_movie_index:
+            #         similar_movies = list(enumerate(cosine_sim[movie_index]))
+            #         list_similar_movies.append(similar_movies)
 
-                # Step 7: Get a list of similar movies in descending order of similarity score
-                list_sorted_similar_movies = []
-                for similar_movies in list_similar_movies:
-                    sorted_similar_movies = sorted(
-                        similar_movies, key=lambda x: x[1], reverse=True)
-                    list_sorted_similar_movies.append(sorted_similar_movies)
+            #     # Step 7: Get a list of similar movies in descending order of similarity score
+            #     list_sorted_similar_movies = []
+            #     for similar_movies in list_similar_movies:
+            #         sorted_similar_movies = sorted(
+            #             similar_movies, key=lambda x: x[1], reverse=True)
+            #         list_sorted_similar_movies.append(sorted_similar_movies)
 
-                #Step 8: Print titles of first 12 movies
-                for list_movie in list_sorted_similar_movies:
-                    list_temp = []
-                    count = 0
-                    for movie in list_movie:
-                        movieid = int(get_id_from_index(movie[0]))
-                        title = get_title_from_index(movie[0])
-                        rating = get_rating_from_movieid(movieid, user_id)
-                        list_temp.append(
-                            {'id': movieid, 'title': title, 'rating': rating})
-                        count = count + 1
-                        if count > 12:
-                            break
-                    res.append({'type': 'recommend', 'movie_data': list_temp})
+            #     #Step 8: Print titles of first 12 movies
+            #     for list_movie in list_sorted_similar_movies:
+            #         list_temp = []
+            #         count = 0
+            #         for movie in list_movie:
+            #             movieid = int(get_id_from_index(movie[0]))
+            #             title = get_title_from_index(movie[0])
+            #             rating = get_rating_from_movieid(movieid, user_id)
+            #             list_temp.append(
+            #                 {'id': movieid, 'title': title, 'rating': rating})
+            #             count = count + 1
+            #             if count > 12:
+            #                 break
+            #         res.append({'type': 'recommend', 'movie_data': list_temp})
            
             # Collaborative recommend
             def get_colla_movies():
@@ -246,7 +246,7 @@ class Recommendation(Resource):
             #-1 means NEW USER skip choosing his fav genres
             #the second condition means old user but has no interations with the system
             if genres != '-1' or not all_ratings[all_ratings.userId == int(user_id)].empty:
-                get_contentbased_movies()
+                #get_contentbased_movies()
                 get_colla_movies()
 
             return res

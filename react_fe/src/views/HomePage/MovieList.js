@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import IconButton from "@material-ui/core/IconButton";
 import SvgIcon from "@material-ui/core/SvgIcon";
@@ -8,6 +8,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { makeStyles } from "@material-ui/core/styles";
 import styles from "../../assets/css/scroll-pane.module.css";
 import styles1 from "assets/jss/material-kit-react/views/components.js";
+import axios from "axios";
 import MovieDetails from "./MovieDetails";
 //import { FaAngleDown } from "react-icons/fa";
 
@@ -42,8 +43,29 @@ class MovieList extends Component {
     };
   }
 
-  addToMyList = (event, movieId) => {
-    console.log("avc");
+  addToMyList = (e, movieId) => {
+    e.preventDefault();
+    let config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    let favMovie = {
+      userId: 592,
+      movieId: movieId,
+    };
+    axios
+      .post(
+        `${process.env.REACT_APP_BACKEND_HOST}/watchlists`,
+        favMovie,
+        config
+      )
+      .then((res) => {
+        const { message } = res.data;
+      })
+      .catch((er) => {
+        const { message } = er.response.data;
+      });
   };
 
   onOpenDetClick = (event, movieId) => {
@@ -90,11 +112,11 @@ class MovieList extends Component {
       apiKey = "a1e04f21511bd27a683b88ebc97b8446",
       panelTitle = "",
       splitText = "";
+    console.log(list);
     if (list.length === 0) return;
     this._isMounted = true;
 
     if (list.type.includes("|")) {
-      console.log(list.type);
       splitText = list.type.split("|");
       list.type = splitText[0];
     }
@@ -109,7 +131,7 @@ class MovieList extends Component {
       panelTitle = "Popular " + splitText[1] + " Shows";
     }
     this.setState({ panelTitle: panelTitle });
-
+    let count = 0;
     list.movie_data.map((item) => {
       let api =
         "https://api.themoviedb.org/3/movie/" +
@@ -130,11 +152,34 @@ class MovieList extends Component {
             release_date: data.release_date,
             production_companies: data.production_companies,
           };
-          console.log(item);
           if (this._isMounted) {
-            this.setState({
-              listMovie: [...this.state.listMovie, movie],
-            });
+            count++;
+            this.setState(
+              {
+                listMovie: [...this.state.listMovie, movie],
+              },
+              function () {
+                //   if (count === list.movie_data.length && count < 7) {
+                //   let obj = {
+                //     id: "",
+                //     rating: 0,
+                //     title: "",
+                //     posterPath: "",
+                //     overview: "",
+                //     genres: [],
+                //     release_date: "",
+                //     production_companies: "",
+                //   };
+                //   let temp = this.state.listMovie;
+                //   for (let i = 0; i < 7 - count; i++) {
+                //     temp.push(obj);
+                //   }
+                //   this.setState({
+                //     listMovie: temp,
+                //   });
+                // }
+              }
+            );
           }
         });
     });
@@ -155,7 +200,7 @@ class MovieList extends Component {
     let { query } = this.props;
     let img_url = "https://image.tmdb.org/t/p/w200";
     return (
-      <>
+      <Fragment>
         <div className={styles.container}>
           <div
             style={{
@@ -170,47 +215,50 @@ class MovieList extends Component {
             {listMovie.map((movie) => {
               return (
                 <div key={movie.id} className={styles.box}>
-                  {/* <div onClick={this.onChange} className={styles.plusbtn}> */}
-                  <div
-                    className={styles.icon}
-                    style={{
-                      backgroundImage:
-                        "url(" + img_url + movie.posterPath + ")",
-                    }}
-                    ref={this.myRef}
-                  ></div>
+                  {movie.id === "" ? (
+                    <p>Blank</p>
+                  ) : (
+                    <>
+                      <div
+                        className={styles.icon}
+                        style={{
+                          backgroundImage:
+                            "url(" + img_url + movie.posterPath + ")",
+                        }}
+                        ref={this.myRef}
+                      ></div>
 
-                  <IconButton
-                    className={styles.plusbtn}
-                    onClick={(e) => this.addToMyList(e, movie.id)}
-                  >
-                    <SvgIcon>
-                      <path d="M12 20.016q3.281 0 5.648-2.367t2.367-5.648-2.367-5.648-5.648-2.367-5.648 2.367-2.367 5.648 2.367 5.648 5.648 2.367zM12 2.016q4.125 0 7.055 2.93t2.93 7.055-2.93 7.055-7.055 2.93-7.055-2.93-2.93-7.055 2.93-7.055 7.055-2.93zM12.984 6.984v4.031h4.031v1.969h-4.031v4.031h-1.969v-4.031h-4.031v-1.969h4.031v-4.031h1.969z" />
-                    </SvgIcon>
-                  </IconButton>
+                      <IconButton
+                        className={styles.plusbtn}
+                        onClick={(e) => this.addToMyList(e, movie.id)}
+                      >
+                        <SvgIcon>
+                          <path d="M12 20.016q3.281 0 5.648-2.367t2.367-5.648-2.367-5.648-5.648-2.367-5.648 2.367-2.367 5.648 2.367 5.648 5.648 2.367zM12 2.016q4.125 0 7.055 2.93t2.93 7.055-2.93 7.055-7.055 2.93-7.055-2.93-2.93-7.055 2.93-7.055 7.055-2.93zM12.984 6.984v4.031h4.031v1.969h-4.031v4.031h-1.969v-4.031h-4.031v-1.969h4.031v-4.031h1.969z" />
+                        </SvgIcon>
+                      </IconButton>
 
-                  <IconButton
-                    className={styles.arrowbtn}
-                    onClick={(e) => this.onOpenDetClick(e, movie.id)}
-                  >
-                    {isOpenDetails ? (
-                      <SvgIcon>
-                        <path d="M7.406 15.422l-1.406-1.406 6-6 6 6-1.406 1.406-4.594-4.594z" />
-                      </SvgIcon>
-                    ) : (
-                      <SvgIcon>
-                        <path d="M7.406 8.578l4.594 4.594 4.594-4.594 1.406 1.406-6 6-6-6z" />
-                      </SvgIcon>
-                    )}
-                  </IconButton>
+                      <IconButton
+                        className={styles.arrowbtn}
+                        onClick={(e) => this.onOpenDetClick(e, movie.id)}
+                      >
+                        {isOpenDetails ? (
+                          <SvgIcon>
+                            <path d="M7.406 15.422l-1.406-1.406 6-6 6 6-1.406 1.406-4.594-4.594z" />
+                          </SvgIcon>
+                        ) : (
+                          <SvgIcon>
+                            <path d="M7.406 8.578l4.594 4.594 4.594-4.594 1.406 1.406-6 6-6-6z" />
+                          </SvgIcon>
+                        )}
+                      </IconButton>
 
-                  {/* </div> */}
-
-                  <div className={styles.content}>
-                    <h3>{movie.title}</h3>
-                    {movie.genres[0] && <> {movie.genres[0].name} </>}
-                    {movie.genres[1] && <> • {movie.genres[1].name} </>}
-                  </div>
+                      <div className={styles.content}>
+                        <h3>{movie.title}</h3>
+                        {movie.genres[0] && <> {movie.genres[0].name} </>}
+                        {movie.genres[1] && <> • {movie.genres[1].name} </>}
+                      </div>
+                    </>
+                  )}
                 </div>
               );
             })}
@@ -225,7 +273,7 @@ class MovieList extends Component {
             </CSSTransition>
           )}
         </TransitionGroup>
-      </>
+      </Fragment>
     );
   }
 }

@@ -56,15 +56,15 @@ function Home(props) {
   useEffect(() => {
     //firstTimeUse && isModelClose: user dùng lần đầu và chọn xong
     //firstTimeUse === false: ko phải user dùng lần đầu
-    if ((firstTimeUse && isModelClose) || firstTimeUse === false) {
-      if (query.length > 2) {
-        getSearchedMovies();
-      } else {
-        if (query.length == 0) {
-          getRecommendedMovies("-1");
-        }
-      }
-    }
+    // if ((firstTimeUse && isModelClose) || firstTimeUse === false) {
+    //   if (query.length > 2) {
+    //     getSearchedMovies();
+    //   } else {
+    //     if (query.length == 0) {
+    //       getRecommendedMovies("-1");
+    //     }
+    //   }
+    // }
   }, [query]);
 
   const onChangeRecList = (text) => {
@@ -75,7 +75,6 @@ function Home(props) {
 
   const getRecommendedMovies = (text) => {
     let idUser = 592;
-    //console.log(text);
     fetch(`${process.env.REACT_APP_BACKEND_HOST}/rec/` + idUser + "/" + text)
       .then((res) => res.json())
       .then((data) => {

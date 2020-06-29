@@ -10,6 +10,8 @@ from api.User.UserList import UserList
 from api.User.UserLogin import UserLogin
 from api.User.UserUpdateFirstTimeUse import UserUpdateFirstTimeUse
 from api.Dataset.RecommendationSystem import Recommendation, WriteCSV, Search
+from api.WatchList.WatchList import WatchList
+from api.WatchList.WatchLists import WatchLists
 api = Api(app)
 
 
@@ -30,7 +32,8 @@ api.add_resource(UserChangePassword, '/users/<ObjectId:user_id>/password')
 api.add_resource(UserList, '/users')
 api.add_resource(UserLogin, '/users/login')
 api.add_resource(Ping, '/')
-
+api.add_resource(WatchList, '/watchlist/<int:user_id>')
+api.add_resource(WatchLists, '/watchlists')
 # app.wsgi_app = Middleware(app.wsgi_app)
 
 

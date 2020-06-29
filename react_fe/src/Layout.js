@@ -27,7 +27,7 @@ export default function Layout(props) {
     <div>
       {path ? (
         <Header
-          brand="Material Kit React"
+          brand="Home"
           userLogout={userLogout}
           fixed
           color="transparent"
@@ -40,7 +40,7 @@ export default function Layout(props) {
         />
       ) : (
         <Header
-          brand="Material Kit React"
+          brand="Home"
           rightLinks={
             <HeaderLinks
               changeColorOnScroll={{
