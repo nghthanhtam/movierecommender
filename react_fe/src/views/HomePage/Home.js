@@ -18,7 +18,7 @@ function Home(props) {
   const [list, setList] = useState([]);
   const [userGenre, setUserGenre] = useState("-1");
   const [isModelClose, setIsModelClose] = useState(false);
-  const { query, payload } = props;
+  const { query, payload, changeFirstTimeUse } = props;
   const { firstTimeUse, fullname, id } = payload;
 
   useEffect(() => {
@@ -131,7 +131,9 @@ function Home(props) {
       </div>
 
       <GenreDialog
+        changeFirstTimeUse={changeFirstTimeUse}
         open={firstTimeUse}
+        payload={payload}
         onSave={onChangeRecList}
         id={id}
       ></GenreDialog>

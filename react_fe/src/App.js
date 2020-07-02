@@ -43,6 +43,10 @@ class App extends Component {
     let payload = jwt.decode(value);
     this.setState({ token: value, payload });
   };
+  changeFirstTimeUse = (payld) => {
+    console.log(payld);
+    this.setState({ ...this.state, payload: payld });
+  };
 
   // componentDidUpdate(prevProps, prevState) {
   //   const { token } = this.state;
@@ -68,6 +72,7 @@ class App extends Component {
           userLogout={userLogout}
           token={token}
           onQueryChange={onQueryChange}
+          payload={payload}
         >
           <Switch>
             <Route
@@ -76,7 +81,7 @@ class App extends Component {
               userLogout={this.userLogout}
             />
             <Route
-              path="/profile-page"
+              path="/user/:id"
               component={ProfilePage}
               userLogout={this.userLogout}
             />
@@ -105,6 +110,7 @@ class App extends Component {
                       query={query}
                       component={Home}
                       payload={payload}
+                      changeFirstTimeUse={this.changeFirstTimeUse}
                     />
                   );
                 else return <Redirect to="/login" />;

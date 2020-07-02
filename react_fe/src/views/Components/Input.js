@@ -13,6 +13,7 @@ import NotesIcon from "@material-ui/icons/Notes";
 
 export default function Input(props) {
   const {
+    disabled,
     id,
     labeltext,
     validation,
@@ -27,7 +28,8 @@ export default function Input(props) {
       <CustomInput
         labelText={labeltext}
         id={id}
-        error={input === "" ? false : !validation(input)}
+        disabled={disabled}
+        error={disabled ? false : input === "" ? false : !validation(input)}
         formControlProps={{
           fullWidth: true,
         }}
@@ -51,7 +53,9 @@ export default function Input(props) {
           onChange: handleChange,
         }}
       />
-      {input === "" ? (
+      {disabled ? (
+        ""
+      ) : input === "" ? (
         ""
       ) : !validation(input) ? (
         <Danger>{errorText}</Danger>
