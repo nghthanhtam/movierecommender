@@ -1,7 +1,7 @@
-const parallaxStyle = {
+const parallaxSmallStyle = {
   parallax: {
     height: "90vh",
-    maxHeight: "800px",
+    maxHeight: "120px",
     overflow: "hidden",
     position: "relative",
     backgroundPosition: "center center",
@@ -32,4 +32,4 @@ const parallaxStyle = {
   },
 };
 
-export default parallaxStyle;
+export default parallaxSmallStyle;
