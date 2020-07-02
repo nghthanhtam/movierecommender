@@ -7,7 +7,6 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { makeStyles } from "@material-ui/core/styles";
 import styles from "../../assets/css/scroll-pane.module.css";
-import effects from "../../assets/css/appearing-effect.css";
 import styles1 from "assets/jss/material-kit-react/views/components.js";
 import MovieDetails from "./MovieDetails";
 //import { FaAngleDown } from "react-icons/fa";
@@ -18,6 +17,7 @@ class MovieList extends Component {
     super(props);
     this.myRef = React.createRef();
     this.onChaonOpenDetClicknge = this.onOpenDetClick.bind(this);
+    this.addToMyList = this.addToMyList.bind(this);
     this.state = {
       settings: {
         infinite: true,
@@ -30,16 +30,28 @@ class MovieList extends Component {
       listMovie: [],
       poster_path: "",
       isOpenDetails: false,
-      details: { overview: "", title: "", rating: 0, id: "" },
+      details: {
+        id: "",
+        overview: "",
+        title: "",
+        rating: 0,
+        release_date: "",
+        production_companies: [],
+      },
       classes: makeStyles(styles1),
     };
   }
 
+  addToMyList = (event, movieId) => {
+    console.log("avc");
+  };
+
   onOpenDetClick = (event, movieId) => {
     let { isOpenDetails, listMovie } = this.state;
     let value = isOpenDetails ? false : true,
-      movie = listMovie.find((movie) => movie.id == movieId);
+      movie = listMovie.find((movie) => movie.id === movieId);
 
+    //adding user-clicking points
     this.setState({ isOpenDetails: value }, () => {
       if (isOpenDetails === true) return;
       fetch(`${process.env.REACT_APP_BACKEND_HOST}/writecsv`, {
@@ -53,9 +65,11 @@ class MovieList extends Component {
           return response.json();
         })
         .then((json) => {
-          console.log(json);
+          //console.log(json);
         });
     });
+    //adding user-clicking points
+
     if (value) this.myRef.current.scrollIntoView({ behavior: "smooth" });
 
     this.setState((prevState) => ({
@@ -65,6 +79,8 @@ class MovieList extends Component {
         title: movie.title,
         rating: movie.rating,
         id: movieId,
+        release_date: movie.release_date,
+        production_companies: movie.production_companies,
       },
     }));
   };
@@ -72,17 +88,25 @@ class MovieList extends Component {
   componentDidMount() {
     let { list } = this.props,
       apiKey = "a1e04f21511bd27a683b88ebc97b8446",
-      panelTitle = "";
-    if (list.length == 0) return;
+      panelTitle = "",
+      splitText = "";
+    if (list.length === 0) return;
     this._isMounted = true;
 
+    if (list.type.includes("|")) {
+      console.log(list.type);
+      splitText = list.type.split("|");
+      list.type = splitText[0];
+    }
     if (list.type === "recommend") {
       panelTitle = "Because You Liked " + list.movie_data[0].title;
       list.movie_data.shift();
     } else if (list.type === "popular") {
       panelTitle = "Popular Movies For You";
-    } else if (list.type == "colla") {
+    } else if (list.type === "colla") {
       panelTitle = "You May Also Like";
+    } else if (list.type === "genres") {
+      panelTitle = "Popular " + splitText[1] + " Shows";
     }
     this.setState({ panelTitle: panelTitle });
 
@@ -98,12 +122,15 @@ class MovieList extends Component {
         .then((data) => {
           let movie = {
             id: item.id,
-            rating: item.rating % 1 === 0 ? item.rating : 0,
+            rating: item.rating % 1 == 0 ? item.rating : 0,
             title: data.title,
             posterPath: data.poster_path,
             overview: data.overview,
             genres: data.genres,
+            release_date: data.release_date,
+            production_companies: data.production_companies,
           };
+          console.log(item);
           if (this._isMounted) {
             this.setState({
               listMovie: [...this.state.listMovie, movie],
@@ -153,7 +180,10 @@ class MovieList extends Component {
                     ref={this.myRef}
                   ></div>
 
-                  <IconButton className={styles.plusbtn}>
+                  <IconButton
+                    className={styles.plusbtn}
+                    onClick={(e) => this.addToMyList(e, movie.id)}
+                  >
                     <SvgIcon>
                       <path d="M12 20.016q3.281 0 5.648-2.367t2.367-5.648-2.367-5.648-5.648-2.367-5.648 2.367-2.367 5.648 2.367 5.648 5.648 2.367zM12 2.016q4.125 0 7.055 2.93t2.93 7.055-2.93 7.055-7.055 2.93-7.055-2.93-2.93-7.055 2.93-7.055 7.055-2.93zM12.984 6.984v4.031h4.031v1.969h-4.031v4.031h-1.969v-4.031h-4.031v-1.969h4.031v-4.031h1.969z" />
                     </SvgIcon>

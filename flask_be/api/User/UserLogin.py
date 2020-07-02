@@ -14,7 +14,6 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 class UserLogin(Resource):
     def post(self):
-        print('haha')
         data = request.get_json()
         password = data['password']
         email = data['email']
@@ -26,7 +25,7 @@ class UserLogin(Resource):
         # return(new_user['username'])
         if check_password_hash(new_user['hashed_password'], password):
             encoded_jwt = jwt.encode(
-                {'username': new_user['username'], 'email': new_user['email'], 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60)}, SECRET_KEY, algorithm='HS256')
+                {'username': new_user['username'], 'id': new_user['_id']['$oid'], 'email': new_user['email'], 'fullname': new_user['fullname'], 'firstTimeUse': new_user['firstTimeUse'], 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60)}, SECRET_KEY, algorithm='HS256')
             decoded_token = encoded_jwt.decode('UTF-8')
             return response(decoded_token, 200)
         else:

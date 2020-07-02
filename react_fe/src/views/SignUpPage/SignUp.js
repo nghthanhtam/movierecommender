@@ -2,13 +2,7 @@ import React from "react";
 import { Link, useHistory } from "react-router-dom";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-import InputAdornment from "@material-ui/core/InputAdornment";
 
-// @material-ui/icons
-import Email from "@material-ui/icons/Email";
-import LockOpenIcon from "@material-ui/icons/LockOpen";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import NotesIcon from "@material-ui/icons/Notes";
 // core components
 
 import GridContainer from "components/Grid/GridContainer.js";
@@ -19,7 +13,6 @@ import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 
 import Input from "../Components/Input.js";
-import Danger from "components/Typography/Danger.js";
 
 import styles from "assets/jss/material-kit-react/views/loginPage.js";
 

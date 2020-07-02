@@ -2,11 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-import InputAdornment from "@material-ui/core/InputAdornment";
 
-// @material-ui/icons
-import Email from "@material-ui/icons/Email";
-import LockOpenIcon from "@material-ui/icons/LockOpen";
 // core components
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
@@ -14,8 +10,6 @@ import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
-import CustomInput from "components/CustomInput/CustomInput.js";
-import Danger from "components/Typography/Danger.js";
 import styles from "assets/jss/material-kit-react/views/loginPage.js";
 import Input from "../Components/Input.js";
 import axios from "axios";
@@ -69,7 +63,7 @@ export default function LoginPage(props) {
       .then((res) => {
         const { message } = res.data;
         localStorage.setItem("token", message);
-        userLogin();
+        userLogin(message);
       })
       .catch((er) => {
         const { message } = er.response.data;

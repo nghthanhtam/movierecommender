@@ -16,6 +16,9 @@ import ProfilePage from "views/ProfilePage/ProfilePage.js";
 import LoginPage from "views/LoginPage/LoginPage.js";
 import Layout from "./Layout";
 import SignUp from "./views/SignUpPage/SignUp";
+import ErrorPage from "./views/Error/404";
+import jwt from "jsonwebtoken";
+import MyList from "./views/MyListPage/MyList";
 // import PrivateRoute from "./PrivateRoute";
 // export default function App(props){
 //   const [isLogedIn, setLogedIn] = React.useState( true ? 'haha': 'hoho')
@@ -25,26 +28,37 @@ import SignUp from "./views/SignUpPage/SignUp";
 // }
 class App extends Component {
   state = {
-    token: localStorage.getItem("token"),
+    token: localStorage.getItem("token") ? localStorage.getItem("token") : null,
     query: "",
+    payload: localStorage.getItem("token")
+      ? jwt.decode(localStorage.getItem("token"))
+      : null,
   };
 
   onQueryChange = (query) => {
-    console.log(query);
     this.setState({ query: query });
   };
 
-  userLogin = () => {
-    this.setState({ token: true });
+  userLogin = (value) => {
+    let payload = jwt.decode(value);
+    this.setState({ token: value, payload });
   };
+
+  // componentDidUpdate(prevProps, prevState) {
+  //   const { token } = this.state;
+  //   if (token !== prevState.token && token !== null) {
+  //     let payload = jwt.decode(token);
+  //     this.setState({ payload });
+  //   }
+  // }
 
   userLogout = () => {
     localStorage.clear();
-    this.setState({ token: null });
+    this.setState({ token: null, payload: null });
   };
 
   render() {
-    const { token, query } = this.state;
+    const { token, query, payload } = this.state;
     const { userLogin, userLogout, onQueryChange } = this;
 
     return (
@@ -76,21 +90,30 @@ class App extends Component {
               }}
             />
             <Route
+              path="/mylist"
+              render={(props) => {
+                return <MyList {...props} userLogin={userLogin} />;
+              }}
+            />
+            <Route
               path="/home"
               render={(props) => {
                 if (token)
                   return (
                     <Home
                       {...props}
-                      token={token}
                       query={query}
                       component={Home}
+                      payload={payload}
                     />
                   );
                 else return <Redirect to="/login" />;
               }}
             />
             <Route path="/" exact component={Components} />
+            <Route path="/404" exact>
+              <ErrorPage />
+            </Route>
           </Switch>
         </Layout>
       </Router>

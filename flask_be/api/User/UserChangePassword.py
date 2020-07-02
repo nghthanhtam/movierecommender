@@ -22,7 +22,8 @@ class UserChangePassword(Resource):
         hashed_password = generate_password_hash(password, method='sha256')
         ret = mongo.db.user.find_one_and_update({"_id": ObjectId(user_id)},
                                                 {"$set": {'hashed_password': hashed_password}}, return_document=ReturnDocument.BEFORE)
+        print(ret)
         if ret is None:
-            return response('', 404)
+            return response('12321213', 404)
         else:
             return response('Password updated successfully', 200)

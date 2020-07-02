@@ -2,7 +2,7 @@
   position: relative;
   width: 93%;
   height: 190px;
-  margin: 200px 150px 190px 50px;
+  margin: 200px 150px 180px 50px;
   display: block;
   color: white;
 }
@@ -155,6 +155,7 @@
 }
 .bodyListMovie {
   background-color: #1f1f1f;
+  height: 3000px;
 }
 .eyeicon {
   padding: 0;

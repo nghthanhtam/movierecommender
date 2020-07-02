@@ -28,18 +28,17 @@ export default function CustomInput(props) {
     success,
   } = props;
   React.useEffect(() => {
-    if (props.changeColorOnScroll) {
+    if (changeColorOnScroll) {
       window.addEventListener("scroll", headerColorChange);
     }
     return function cleanup() {
-      if (props.changeColorOnScroll) {
+      if (changeColorOnScroll) {
         window.removeEventListener("scroll", headerColorChange);
       }
     };
   });
 
   const headerColorChange = () => {
-    const { changeColorOnScroll } = props;
     const windowsScrollTop = window.pageYOffset;
     if (windowsScrollTop > changeColorOnScroll.height) {
       document
