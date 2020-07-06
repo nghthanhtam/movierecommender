@@ -91,8 +91,8 @@ export default function ProfilePage(props) {
         if (res.status === 200) setSuccess(res.data.message);
       })
       .catch((er) => {
-        console.log(er);
-        setError("User can not be updated right now!");
+        console.log(er.response);
+        setError(er.response.data.message);
       });
   };
   const config = {
