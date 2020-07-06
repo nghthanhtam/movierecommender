@@ -62,8 +62,14 @@ export default function ProfilePage(props) {
   const prevUserInfo = usePrevious(userInfo);
   const classes = useStyles();
 
+  const validateEmail = (email) => {
+    return /\S+@\S+\.\S+/.test(email);
+  };
   const validateFullname = (name) => {
     return /^[a-zA-Z ]+$/.test(name);
+  };
+  const validateUsername = (username) => {
+    return /^[a-zA-Z0-9_]{5,}$/.test(username);
   };
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -174,7 +180,9 @@ export default function ProfilePage(props) {
                     type="email"
                     input={userInfo.email}
                     classes={classes.inputIconsColor}
-                    disabled
+                    validation={validateEmail}
+                    handleChange={handleChange}
+                    errorText="Your email is incorrect. Please check your spelling."
                   />
 
                   <Input
@@ -183,7 +191,10 @@ export default function ProfilePage(props) {
                     type="username"
                     input={userInfo.username}
                     classes={classes.inputIconsColor}
-                    disabled
+                    validation={validateUsername}
+                    handleChange={handleChange}
+                    errorText="Username must contain only letters, numbers and underscores!
+                    Username must be at least 5 letters!"
                   />
 
                   <Input
