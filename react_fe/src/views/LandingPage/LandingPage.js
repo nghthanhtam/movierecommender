@@ -31,18 +31,6 @@ export default function LandingPage(props) {
   const { ...rest } = props;
   return (
     <div>
-      <Header
-        color="transparent"
-        routes={dashboardRoutes}
-        brand="Material Kit React"
-        rightLinks={<HeaderLinks />}
-        fixed
-        changeColorOnScroll={{
-          height: 400,
-          color: "white"
-        }}
-        {...rest}
-      />
       <Parallax filter image={require("assets/img/landing-bg.jpg")}>
         <div className={classes.container}>
           <GridContainer>
@@ -76,7 +64,6 @@ export default function LandingPage(props) {
           <WorkSection />
         </div>
       </div>
-      <Footer />
     </div>
   );
 }

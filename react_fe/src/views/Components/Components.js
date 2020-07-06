@@ -41,17 +41,6 @@ class Components extends Component {
     let { ...rest } = this.props;
     return (
       <div>
-        <Header
-          brand="Material Kit React"
-          rightLinks={<HeaderLinks />}
-          fixed
-          color="transparent"
-          changeColorOnScroll={{
-            height: 400,
-            color: "white",
-          }}
-          {...rest}
-        />
         <Parallax image={require("assets/img/bg4.jpg")}>
           <div className={classes.container}>
             <GridContainer>
@@ -87,7 +76,6 @@ class Components extends Component {
           <SectionExamples />
           <SectionDownload />
         </div>
-        <Footer />
       </div>
     );
   }

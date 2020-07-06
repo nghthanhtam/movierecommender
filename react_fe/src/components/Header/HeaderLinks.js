@@ -27,14 +27,16 @@ import styles from "assets/jss/material-kit-react/components/headerLinksStyle.js
 const useStyles = makeStyles(styles);
 
 export default function HeaderLinks(props) {
+  const { id } = props.payload;
+  // let id = 123;
   const classes = useStyles();
   const classesHeaderLink = useStylesHeaderLink();
-  const { userLogout, onQueryChange } = props;
+  const { userLogout, onQueryChange, history } = props;
   const userLogoutInComp = (e) => {
     e.preventDefault();
     userLogout();
   };
-
+  // console.log(props);
   const handleChange = (e) => {
     onQueryChange(e.target.value);
     // setQuery(e.target.value);
@@ -108,8 +110,11 @@ export default function HeaderLinks(props) {
             <Link to="/mylist" className={classes.dropdownLink}>
               My list
             </Link>,
-            <Link to="/login" className={classes.dropdownLink}>
-              Settings
+            <Link
+              className={classes.dropdownLink}
+              to={{ pathname: `user/${id}` }}
+            >
+              My profile
             </Link>,
             <a
               href="#"

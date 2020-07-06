@@ -16,6 +16,7 @@ const useStyles = makeStyles(styles);
 export default function CustomInput(props) {
   const classes = useStyles();
   const {
+    disabled,
     formControlProps,
     labelText,
     id,
@@ -97,6 +98,7 @@ export default function CustomInput(props) {
       ) : null}
       <Input
         onChange={props.handleChange}
+        disabled={disabled}
         classes={{
           input: inputClasses,
           root: marginTop,

@@ -105,7 +105,7 @@ class Recommendation(Resource):
                         arr = get_movies_from_genres(g)["result"]
                         for i in arr:
                             res.append({'type': 'genres|'+g.title(),
-                                       'movie_data': i["movie_data"]})
+                                        'movie_data': i["movie_data"]})
 
             # get movies based on genres a NEW USER chose on dialog
             def get_movies_from_genres_dialog():
@@ -203,7 +203,7 @@ class Recommendation(Resource):
             # Collaborative recommend
             def get_colla_movies():
                 ratings = pd.merge(all_dataframe, all_ratings).drop(
-                ['genres', 'timestamp'], axis=1)
+                    ['genres', 'timestamp'], axis=1)
 
                 def standardize(row):
                     new_row = np.subtract(row, row.mean(), dtype=np.float32)
@@ -254,12 +254,7 @@ class Recommendation(Resource):
             # the second condition means old user but has no interations with the system
             if genres != '-1' or not all_ratings[all_ratings.userId == int(user_id)].empty:
 
-
-<< << << < HEAD
-                get_contentbased_movies()
-== == == =
                 # get_contentbased_movies()
->>>>>> > origin/addToMyList
                 get_colla_movies()
 
             return res
@@ -320,11 +315,13 @@ class WriteCSV(Resource):
         if mean_rating == -2:
             ratings = pd.read_csv('ratings.csv')
             ratings = ratings[ratings.userId == data['userid']]
-            mean_rating = ratings["rating"].mean() #calculate mean rating of current user
+            # calculate mean rating of current user
+            mean_rating = ratings["rating"].mean()
         with open('ratings.csv', 'a', newline='') as f:
             thewriter = csv.writer(f)
             ratings = pd.read_csv("ratings.csv")
-            ratings = ratings[ratings.movieId == data["id"]][ratings.userId == 592]
+            ratings = ratings[ratings.movieId ==
+                              data["id"]][ratings.userId == 592]
             ratings = ratings.nlargest(1, ['timestamp'])
             if not ratings.empty and data['rating'] == -2:
                 return response('Failed to add rating', 200)

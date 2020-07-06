@@ -72,7 +72,7 @@ const DialogActions = withStyles((theme) => ({
 }))(MuiDialogActions);
 
 export default function GenreDialog(props) {
-  const { open, id } = props;
+  const { open, id, changeFirstTimeUse, payload } = props;
 
   let history = useHistory();
   const [state, setState] = React.useState({
@@ -111,7 +111,26 @@ export default function GenreDialog(props) {
   };
   const handleSave = () => {
     // Nhớ đặt lệnh này trong phần .then của mày để đóng modal :D
-    changeOpenInDialog(false);
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    axios
+      .put(
+        `${process.env.REACT_APP_BACKEND_HOST}/users/${id}/updateFirstTimeUse`,
+        config
+      )
+      .then((res) => {
+        changeOpenInDialog(false);
+        props.onSave("-1");
+        changeFirstTimeUse({ ...payload, firstTimeUse: false });
+      })
+      .catch((er) => {
+        history.push("/404");
+      });
+
     let text = "";
     if (checkboxDrama) text += "|drama";
     if (checkboxFamily) text += "|family";

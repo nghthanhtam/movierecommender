@@ -30,7 +30,13 @@ class User(Resource):
         email = data['email']
         fullname = data['fullname']
         role = data['role']
-        if username and email:
+
+        if mongo.db.user.count_documents({'email': email, '_id': {'$ne': ObjectId(user_id)}}, limit=1) != 0:
+            return response('Email is already registered', 400)
+        if mongo.db.user.count_documents({'username': username, '_id': {'$ne': ObjectId(user_id)}}, limit=1) != 0:
+            return response('Username is already registered', 400)
+
+        if username and email and fullname:
             ret = mongo.db.user.find_one_and_update({"_id": ObjectId(user_id)},
                                                     {"$set":
                                                      {'username': username, 'email': email, 'fullname': fullname, 'role': role}}, return_document=ReturnDocument.BEFORE)

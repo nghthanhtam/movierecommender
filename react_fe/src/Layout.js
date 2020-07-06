@@ -12,6 +12,7 @@ const useStyles = makeStyles(styles);
 
 export default function Layout(props) {
   const {
+    payload,
     token,
     children,
     userLogout,
@@ -25,17 +26,15 @@ export default function Layout(props) {
   const path = pathname === "/login" || pathname === "/signup" ? true : false;
   return (
     <div>
-      {path ? (
+      {!token ? (
         <Header
-          brand="Home"
-          userLogout={userLogout}
+          brand="Login"
           fixed
           color="transparent"
           changeColorOnScroll={{
             height: 400,
             color: "white",
           }}
-          token={token}
           {...rest}
         />
       ) : (
@@ -49,6 +48,7 @@ export default function Layout(props) {
               }}
               userLogout={userLogout}
               onQueryChange={onQueryChange}
+              payload={payload}
             />
           }
           fixed
