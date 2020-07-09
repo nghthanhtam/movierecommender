@@ -34,6 +34,8 @@ api.add_resource(UserLogin, '/users/login')
 api.add_resource(Ping, '/')
 api.add_resource(WatchList, '/watchlist/<int:user_id>')
 api.add_resource(WatchLists, '/watchlists')
+
+
 # app.wsgi_app = Middleware(app.wsgi_app)
 
 

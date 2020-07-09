@@ -7,6 +7,16 @@ from pymongo.collection import ReturnDocument
 
 
 class UserUpdateFirstTimeUse(Resource):
+    def get(self, user_id):
+        user = mongo.db.user.find_one(
+            {"_id": ObjectId(user_id)}, {"firstTimeUse": 1})
+        if user is None:
+            return response('', 404)
+        else:
+            new_user = json.loads(json_util.dumps(user))
+            new_user['_id'] = new_user['_id']["$oid"]
+            return new_user, 200
+
     def put(self, user_id):
         ret = mongo.db.user.find_one_and_update({"_id": ObjectId(user_id)},
                                                 {"$set":
