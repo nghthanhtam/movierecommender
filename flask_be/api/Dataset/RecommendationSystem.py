@@ -19,11 +19,12 @@ class Recommendation(Resource):
             all_ratings = pd.read_csv("ratings.csv")
             all_dataframe = dataframe
 
-            def get_title_from_index(index):
+            def get_title_from_index(index):	  
                 return dataframe[dataframe.index == index]["title"].values[0]
 
             def get_index_from_movieid(id):
-                return dataframe[dataframe.movieId == id]["index"].values[0]
+                return dataframe[dataframe.movieId == id]["index"].values[0]	                return dataframe[dataframe.movieId == id]["index"].values[0]
+
 
             def get_id_from_index(index):
                 return dataframe[dataframe.index == index]["movieId"].values[0]

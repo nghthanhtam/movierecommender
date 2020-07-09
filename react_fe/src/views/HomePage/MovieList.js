@@ -151,7 +151,6 @@ class MovieList extends Component {
             release_date: data.release_date,
             production_companies: data.production_companies,
           };
-          console.log(item);
           if (this._isMounted) {
             count++;
             this.setState(

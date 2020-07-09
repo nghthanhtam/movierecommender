@@ -43,10 +43,6 @@ class App extends Component {
     let payload = jwt.decode(value);
     this.setState({ token: value, payload });
   };
-  changeFirstTimeUse = (payld) => {
-    console.log(payld);
-    this.setState({ ...this.state, payload: payld });
-  };
 
   // componentDidUpdate(prevProps, prevState) {
   //   const { token } = this.state;
@@ -64,7 +60,6 @@ class App extends Component {
   render() {
     const { token, query, payload } = this.state;
     const { userLogin, userLogout, onQueryChange } = this;
-
     return (
       <Router history={createBrowserHistory()}>
         <Layout
@@ -110,7 +105,6 @@ class App extends Component {
                       query={query}
                       component={Home}
                       payload={payload}
-                      changeFirstTimeUse={this.changeFirstTimeUse}
                     />
                   );
                 else return <Redirect to="/login" />;

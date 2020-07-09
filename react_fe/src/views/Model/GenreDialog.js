@@ -72,7 +72,7 @@ const DialogActions = withStyles((theme) => ({
 }))(MuiDialogActions);
 
 export default function GenreDialog(props) {
-  const { open, id, changeFirstTimeUse, payload } = props;
+  const { open, id, payload, setFirstTimeUse } = props;
 
   let history = useHistory();
   const [state, setState] = React.useState({
@@ -125,7 +125,7 @@ export default function GenreDialog(props) {
       .then((res) => {
         changeOpenInDialog(false);
         props.onSave("-1");
-        changeFirstTimeUse({ ...payload, firstTimeUse: false });
+        setFirstTimeUse(false);
       })
       .catch((er) => {
         history.push("/404");

@@ -10,6 +10,7 @@ import GridItem from "components/Grid/GridItem.js";
 import Parallax from "components/Parallax/Parallax.js";
 import MovieList from "./MovieList.js";
 import GenreDialog from "../Model/GenreDialog";
+import axios from "axios";
 
 const useStyles = makeStyles(styles1);
 
@@ -19,7 +20,30 @@ function Home(props) {
   const [userGenre, setUserGenre] = useState("-1");
   const [isModelClose, setIsModelClose] = useState(false);
   const { query, payload, changeFirstTimeUse } = props;
-  const { firstTimeUse, fullname, id } = payload;
+  const { fullname, id } = payload;
+  const [firstTimeUse, setFirstTimeUse] = useState(false);
+
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  useEffect(() => {
+    axios
+      .get(
+        `${process.env.REACT_APP_BACKEND_HOST}/users/${id}/updateFirstTimeUse`,
+        config
+      )
+      .then((res) => {
+        const { firstTimeUse } = res.data;
+        setFirstTimeUse(firstTimeUse);
+      })
+      .catch((er) => {
+        // const { message } = er.response.data;
+        // console.log(message);
+        console.log(er);
+      });
+  }, []);
 
   useEffect(() => {
     if ((firstTimeUse && isModelClose) || firstTimeUse === false) {
@@ -100,7 +124,6 @@ function Home(props) {
         });
         setList([]);
         setList(arrTemp);
-        console.log(data.result);
       });
   };
 
@@ -131,8 +154,8 @@ function Home(props) {
       </div>
 
       <GenreDialog
-        changeFirstTimeUse={changeFirstTimeUse}
         open={firstTimeUse}
+        setFirstTimeUse={setFirstTimeUse}
         payload={payload}
         onSave={onChangeRecList}
         id={id}
