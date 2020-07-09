@@ -39,6 +39,8 @@ class MovieList extends Component {
         release_date: "",
         production_companies: [],
       },
+      watchlist: [],
+      test: "",
       classes: makeStyles(styles1),
     };
   }
@@ -62,6 +64,7 @@ class MovieList extends Component {
       )
       .then((res) => {
         const { message } = res.data;
+        this.getWatchList();
       })
       .catch((er) => {
         const { message } = er.response.data;
@@ -73,7 +76,7 @@ class MovieList extends Component {
     let value = isOpenDetails ? false : true,
       movie = listMovie.find((movie) => movie.id === movieId);
 
-    //adding user-clicking points
+    ////////////////adding user-clicking points
     this.setState({ isOpenDetails: value }, () => {
       if (isOpenDetails === true) return;
       fetch(`${process.env.REACT_APP_BACKEND_HOST}/writecsv`, {
@@ -86,14 +89,10 @@ class MovieList extends Component {
         .then((response) => {
           return response.json();
         })
-        .then((json) => {
-          //console.log(json);
-        });
+        .then((json) => {});
     });
-    //adding user-clicking points
 
     if (value) this.myRef.current.scrollIntoView({ behavior: "smooth" });
-
     this.setState((prevState) => ({
       details: {
         ...prevState.details,
@@ -107,14 +106,30 @@ class MovieList extends Component {
     }));
   };
 
+  getWatchList = () => {
+    let userId = 592;
+    fetch(`${process.env.REACT_APP_BACKEND_HOST}/watchlist/` + userId)
+      .then((res) => res.json())
+      .then((data) => {
+        data.map((movie) => {
+          this.setState((prevState) => ({
+            watchlist: [...prevState.watchlist, movie.movieId],
+          }));
+        });
+        console.log(data);
+      });
+  };
+
   componentDidMount() {
     let { list } = this.props,
       apiKey = "a1e04f21511bd27a683b88ebc97b8446",
       panelTitle = "",
       splitText = "";
-    console.log(list);
     if (list.length === 0) return;
     this._isMounted = true;
+
+    //////get watch list from db
+    this.getWatchList();
 
     if (list.type.includes("|")) {
       splitText = list.type.split("|");
@@ -159,25 +174,25 @@ class MovieList extends Component {
                 listMovie: [...this.state.listMovie, movie],
               },
               function () {
-                //   if (count === list.movie_data.length && count < 7) {
-                //   let obj = {
-                //     id: "",
-                //     rating: 0,
-                //     title: "",
-                //     posterPath: "",
-                //     overview: "",
-                //     genres: [],
-                //     release_date: "",
-                //     production_companies: "",
-                //   };
-                //   let temp = this.state.listMovie;
-                //   for (let i = 0; i < 7 - count; i++) {
-                //     temp.push(obj);
-                //   }
-                //   this.setState({
-                //     listMovie: temp,
-                //   });
-                // }
+                if (count === list.movie_data.length && count < 7) {
+                  let obj = {
+                    id: "",
+                    rating: 0,
+                    title: "",
+                    posterPath: "",
+                    overview: "",
+                    genres: [],
+                    release_date: "",
+                    production_companies: "",
+                  };
+                  let temp = this.state.listMovie;
+                  for (let i = 0; i < 7 - count; i++) {
+                    temp.push(obj);
+                  }
+                  this.setState({
+                    listMovie: temp,
+                  });
+                }
               }
             );
           }
@@ -196,6 +211,7 @@ class MovieList extends Component {
       isOpenDetails,
       details,
       panelTitle,
+      watchlist,
     } = this.state;
     let { query } = this.props;
     let img_url = "https://image.tmdb.org/t/p/w200";
@@ -232,9 +248,15 @@ class MovieList extends Component {
                         className={styles.plusbtn}
                         onClick={(e) => this.addToMyList(e, movie.id)}
                       >
-                        <SvgIcon>
-                          <path d="M12 20.016q3.281 0 5.648-2.367t2.367-5.648-2.367-5.648-5.648-2.367-5.648 2.367-2.367 5.648 2.367 5.648 5.648 2.367zM12 2.016q4.125 0 7.055 2.93t2.93 7.055-2.93 7.055-7.055 2.93-7.055-2.93-2.93-7.055 2.93-7.055 7.055-2.93zM12.984 6.984v4.031h4.031v1.969h-4.031v4.031h-1.969v-4.031h-4.031v-1.969h4.031v-4.031h1.969z" />
-                        </SvgIcon>
+                        {watchlist.includes(movie.id) ? (
+                          <SvgIcon>
+                            <path d="M12 20.016q3.281 0 5.648-2.367t2.367-5.648-2.367-5.648-5.648-2.367-5.648 2.367-2.367 5.648 2.367 5.648 5.648 2.367zM12 2.016q4.125 0 7.055 2.93t2.93 7.055-2.93 7.055-7.055 2.93-7.055-2.93-2.93-7.055 2.93-7.055 7.055-2.93zM16.594 7.594l1.406 1.406-8.016 8.016-4.969-5.016 1.406-1.406 3.563 3.563z" />
+                          </SvgIcon>
+                        ) : (
+                          <SvgIcon>
+                            <path d="M12 20.016q3.281 0 5.648-2.367t2.367-5.648-2.367-5.648-5.648-2.367-5.648 2.367-2.367 5.648 2.367 5.648 5.648 2.367zM12 2.016q4.125 0 7.055 2.93t2.93 7.055-2.93 7.055-7.055 2.93-7.055-2.93-2.93-7.055 2.93-7.055 7.055-2.93zM12.984 6.984v4.031h4.031v1.969h-4.031v4.031h-1.969v-4.031h-4.031v-1.969h4.031v-4.031h1.969z" />
+                          </SvgIcon>
+                        )}
                       </IconButton>
 
                       <IconButton

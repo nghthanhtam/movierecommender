@@ -5,7 +5,7 @@ from app import mongo, response
 
 class WatchList(Resource):
     def get(self, user_id):
-        watchlist = mongo.db.watchlist.find({"userId": str(user_id)})
+        watchlist = mongo.db.watchlist.find({"userId": (user_id)})
         output = []
         print(user_id)
         for movie in watchlist:
@@ -15,7 +15,7 @@ class WatchList(Resource):
         return output, 200
     
     def delete(self, role_id):
-        ret = mongo.db.watchlist.remove({"userId": str(user_id)})
+        ret = mongo.db.watchlist.remove({"userId": (user_id)})
         if ret is None:
             return response('', 404)
         else:
